@@ -14,7 +14,8 @@ module.exports = {
       veryLightGray: '#F5F6FA',
       softRed: '#ED6468',
       paleRed: '#FFB8BB',
-      white: '#ffffff'
+      white: '#ffffff',
+      black: '#000000'
     }
   },
   plugins: [],

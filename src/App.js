@@ -3,6 +3,7 @@ import Comment from './components/Comment'
 import Add from './components/Add';
 import Data from './data.json'
 import Reply from './components/comment/Reply';
+import Delete from './components/Delete';
 
 
   // add logic for "you"  and delete buttons
@@ -12,8 +13,8 @@ function App() {
   return (
     <div className="App" id='app'>
       <div id='mainWrapper'>
-        <div id='mainContainer' className='bg-veryLightGray px-4 py-8'>
-          <div id='commentReplyWrapper'>
+        <div id='mainContainer' className='bg-veryLightGray py-8'>
+          <div id='commentReplyWrapper' className=' px-4'>
             <div id='commentWrapper'>
               <Comment />
             </div>
@@ -32,12 +33,12 @@ function App() {
             }
 
           </div>
-          <div id='addCommentWrapper'>
+          <div id='addCommentWrapper' className='px-4'>
             <Add />
           </div>
-          {/* <div id='delete'>
+          <div id='deleteWrapper' className='hidden'>
             <Delete />
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
