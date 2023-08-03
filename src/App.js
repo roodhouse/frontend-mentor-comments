@@ -5,9 +5,13 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-
+  // counter logic
   // add logic for "you"  and delete buttons
-// delete module
+  // reply button click logic
+  // edit button click logic
+  // send button logic
+  // cancel button logic
+  // confirm button logic
 
 function App() {
   return (

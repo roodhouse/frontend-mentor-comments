@@ -4,15 +4,45 @@ import Minus from '../../images/icon-minus.svg'
 import Reply from '../../images/icon-reply.svg'
 
 function Footer({record}) {
+
+    function handlePlus() {
+        console.log('boom')
+        let increase = localStorage.getItem(record.id+'score')
+        console.log(increase)
+        increase = parseInt(increase)
+        console.log(typeof increase)
+        increase = ++increase
+        localStorage.setItem(record.id+'score', increase)
+        console.log(increase)
+        document.getElementById('scoreContainer').firstChild.innerHTML = localStorage.getItem(record.id+'score')
+    }
   return (
+
     <>
         <div id="commentFooterContainer" className='flex justify-between items-center'>
             <div id="counterContainer" className='flex items-center py-[10px] pr-[10px] pl-[15px] bg-veryLightGray rounded-[10px]'>
                 <div id="plus" className='mr-[9px]'>
-                    <img src={Plus} alt="Plus" />
+                    <button onClick={handlePlus}>
+                        <img src={Plus} alt="Plus" />
+                    </button>
                 </div>
                 <div id="scoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px]'>
-                    <p>{record.score}</p>
+            
+                    {
+                        !localStorage.getItem(record.id+'score') ? (() => {
+                            localStorage.setItem(record.id+'score', record.score)
+                            let score = localStorage.getItem(record.id+'score')
+                            console.log(score)
+                            return(
+                                <p>{score}</p>
+                            )
+                        })() : (() => {
+                            let score = localStorage.getItem(record.id+'score')
+                            return(
+                                <p>{score}</p>
+                            )
+                        })()
+                    }
                 </div>
                 <div id="minus">
                     <img src={Minus} alt="Minus" />
