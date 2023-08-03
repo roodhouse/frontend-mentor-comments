@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {},
     colors: {
-      moderateBlue: '#323352',
+      moderateBlue: '#5357B6',
       darkBlue: '#465A72',
       lightGrayBlue: '#C3C4EF',
       grayishBlue: '#67727E',
@@ -14,7 +14,8 @@ module.exports = {
       veryLightGray: '#F5F6FA',
       softRed: '#ED6468',
       paleRed: '#FFB8BB',
-      white: '#000000'
+      white: '#ffffff',
+      black: '#000000'
     }
   },
   plugins: [],

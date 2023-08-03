@@ -1,0 +1,34 @@
+import React from 'react'
+import Plus from '../../../images/icon-plus.svg'
+import Minus from '../../../images/icon-minus.svg'
+import Reply from '../../../images/icon-reply.svg'
+
+function ReplyFooter({record}) {
+  return (
+    <>
+        <div id="replyFooterContainer" className='flex justify-between items-center'>
+            <div id="replyCounterContainer" className='flex items-center py-[10px] pr-[10px] pl-[15px] bg-veryLightGray rounded-[10px]'>
+                <div id="replyPlus" className='mr-[9px]'>
+                    <img src={Plus} alt="Plus" />
+                </div>
+                <div id="replyScoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px]'>
+                    <p>{record.score}</p>
+                </div>
+                <div id="replyMinus">
+                    <img src={Minus} alt="Minus" />
+                </div>
+            </div>
+            <div id="replyButtonContainer" className='flex items-center'>
+                <div id="replyButtonIcon" className='mr-2'>
+                    <img src={Reply} alt="Reply" />
+                </div>
+                <div id="replyButtonCopy" className='text-moderateBlue text-base font-medium leading-6'>
+                    <p>Reply</p>
+                </div>
+            </div>
+        </div>
+    </>
+  )
+}
+
+export default ReplyFooter
