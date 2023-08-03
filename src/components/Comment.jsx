@@ -4,10 +4,9 @@ import Header from './comment/Header'
 import Body from './comment/Body'
 import Footer from './comment/Footer'
 
-// create componets for header, body, footer
-// use if statement to check for comments
-
 function Comment() {
+
+    
 
   return (
     <>
@@ -15,11 +14,11 @@ function Comment() {
             {
                 Data && Data.comments.map(record => {
                     return(
-                        <div id={record.id}>
+                        <div id={record.id} className='bg-white mb-4 p-4 rounded-lg'>
                             <div id="headerWrapper">
                                 <Header record={record} />
                             </div>
-                            <div id="commentBodyWrapper">
+                            <div id="commentBodyWrapper" className='mb-4'>
                                 <Body record={record} />
                             </div>
                             <div id="commentFooterWrapper">
