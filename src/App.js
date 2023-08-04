@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './App.css';
 import Comment from './components/Comment'
 import Add from './components/Add';
@@ -21,7 +21,6 @@ import Delete from './components/Delete';
 
   let loggedIn = allComments.currentUser.username
 
-  console.log(allComments)
 
   // const newComment = {
   //   content: 'Hi there',
@@ -43,12 +42,6 @@ import Delete from './components/Delete';
   // currentComments.push(newComment)
 
 function App() {
-
-  useEffect(() => {
-    if (!localStorage.getItem('username')) {
-      localStorage.setItem('username', Data.currentUser.username)
-    } 
-  })
   
   return (
     <div className="App" id='app'>

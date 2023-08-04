@@ -6,9 +6,20 @@ import Delete from '../../../images/icon-delete.svg'
 import Edit from '../../../images/icon-edit.svg'
 
 function ReplyFooter({record, loggedIn}) {
+
+    let theComments = localStorage.getItem('allComments')
+    theComments = JSON.parse(theComments)
     
     function handlePlus(e) {
+        // get id of the parent comment
+        let parentComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement.id
+        console.log(parentComment)
+        console.log(theComments)
+
+        // go down and update the plus/minus functions to getting data from theComments var rather than the custom LS, then continue here.
+
         let increase = localStorage.getItem(record.id+'score')
+        // let increase = theComments.
         increase = parseInt(increase)
         increase = ++increase
         localStorage.setItem(record.id+'score', increase)
@@ -43,12 +54,12 @@ function ReplyFooter({record, loggedIn}) {
                             let score = localStorage.getItem(record.id+'score')
     
                             return(
-                                <p>{score}</p>
+                                <p id={record.id+'current'}>{score}</p>
                             )
                         })() : (() => {
                             let score = localStorage.getItem(record.id+'score')
                             return(
-                                <p>{score}</p>
+                                <p id={record.id+'current'}>{score}</p>
                             )
                         })()
                     }
