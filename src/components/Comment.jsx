@@ -1,19 +1,17 @@
-import React from 'react'
-import Data from '../data.json'
+import React, { Fragment } from 'react'
 import Header from './comment/Header'
 import Body from './comment/Body'
 import Footer from './comment/Footer'
 
-function Comment() {
-
-    
+function Comment({allComments}) {
 
   return (
     <>
         <div id="commentContainer">
             {
-                Data && Data.comments.map(record => {
+                allComments && allComments.comments.map(record => {
                     return(
+
                         <div id={record.id} className='bg-white mb-4 p-4 rounded-lg'>
                             <div id="headerWrapper">
                                 <Header record={record} />

@@ -8,11 +8,16 @@ import Delete from './components/Delete';
 
   // reply button click logic
     // save new reply to local storage
-    // change the data on load to come from ls rather than data file
   // edit button click logic
   // send button logic
   // cancel button logic
   // confirm button logic
+
+  localStorage.setItem('allComments', JSON.stringify(Data))
+  let allComments = localStorage.getItem('allComments')
+  allComments = JSON.parse(allComments)
+
+  let loggedIn = allComments.currentUser.username
 
 function App() {
 
@@ -28,15 +33,16 @@ function App() {
         <div id='mainContainer' className='bg-veryLightGray py-8'>
           <div id='commentReplyWrapper' className=' px-4'>
             <div id='commentWrapper'>
-              <Comment />
+              <Comment allComments={allComments} />
             </div>
             {
-              Data && Data.comments.map(record => {
+              allComments && allComments.comments.map(record => {
                 return(
                   record.replies.length > 0 ? (
                     <div id='replyWrapper'>
-                      <Reply record={record} />
+                      <Reply record={record} loggedIn={loggedIn} />
                     </div>
+
                   ) : (
                     ""
                   )
@@ -45,7 +51,7 @@ function App() {
             }
           </div>
           <div id='addCommentWrapper' className='px-4'>
-            <Add />
+            <Add allComments={allComments} />
           </div>
           <div id='deleteWrapper' className='hidden'>
             <Delete />

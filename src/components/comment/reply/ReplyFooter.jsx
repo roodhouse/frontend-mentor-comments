@@ -8,8 +8,6 @@ import Edit from '../../../images/icon-edit.svg'
 function ReplyFooter({record}) {
  
     let loggedIn = localStorage.getItem('username')
-    console.log(loggedIn)
-    console.log(record)
 
     function handlePlus(e) {
         let increase = localStorage.getItem(record.id+'score')
@@ -27,7 +25,6 @@ function ReplyFooter({record}) {
         } else {
             decrease = --decrease
             localStorage.setItem(record.id+'score', decrease)
-            console.log(e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML)
             e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
         }
     }
@@ -46,7 +43,7 @@ function ReplyFooter({record}) {
                         !localStorage.getItem(record.id+'score') ? (() => {
                             localStorage.setItem(record.id+'score', record.score)
                             let score = localStorage.getItem(record.id+'score')
-                            console.log(score)
+    
                             return(
                                 <p>{score}</p>
                             )

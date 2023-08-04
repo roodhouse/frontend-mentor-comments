@@ -1,8 +1,6 @@
 import React from 'react'
 
-function ReplyHeader({record}) {
-
-    let loggedIn = localStorage.getItem('username')
+function ReplyHeader({record, loggedIn}) {
 
   return (
     <>
@@ -24,10 +22,7 @@ function ReplyHeader({record}) {
              }
             <div id="replyTime" className='text-grayishBlue text-base font-normal leading-6'>
                 <p>{record.createdAt}</p>
-            </div>
-                    
-                
-            
+            </div>  
         </div>
     </>
   )
