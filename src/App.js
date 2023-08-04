@@ -8,6 +8,8 @@ import Delete from './components/Delete';
 
   // reply button click logic
     // save new reply to local storage
+      // save reply as an object with the user details and comment
+      // overview of ls https://blog.logrocket.com/localstorage-javascript-complete-guide/
   // edit button click logic
   // send button logic
   // cancel button logic
