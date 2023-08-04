@@ -11,19 +11,35 @@ function ReplyFooter({record, loggedIn}) {
     theComments = JSON.parse(theComments)
     
     function handlePlus(e) {
-        // get id of the parent comment
-        let parentComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement.id
-        console.log(parentComment)
-        console.log(theComments)
+        // get id of the sister comment and then the parent comment
+        let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
+        console.log(sisterComment)
+        console.log(sisterComment.parentElement.parentElement.previousSibling)
+
+        // if(parentComment.classList.contains('reply')) {
+            
+        //     parentComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement.id
+        //     console.log(record)
+            
+            
+        //     record.score = ++record.score
+            
+        //     localStorage.setItem('allComments', JSON.stringify(record))
+        //     theComments = localStorage.getItem('allComments')
+        //     theComments = JSON.parse(theComments)
+        //     console.log(theComments)
+        //     e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = record.score
+            
+        // }
 
         // go down and update the plus/minus functions to getting data from theComments var rather than the custom LS, then continue here.
 
-        let increase = localStorage.getItem(record.id+'score')
-        // let increase = theComments.
-        increase = parseInt(increase)
-        increase = ++increase
-        localStorage.setItem(record.id+'score', increase)
-        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+        // let increase = localStorage.getItem(record.id+'score')
+        // // let increase = theComments.
+        // increase = parseInt(increase)
+        // increase = ++increase
+        // localStorage.setItem(record.id+'score', increase)
+        // e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
     }
 
     function handleMinus(e) {
@@ -48,21 +64,29 @@ function ReplyFooter({record, loggedIn}) {
                     </button>
                 </div>
                 <div id="replyScoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px]'>
-                    {
+                    {/* {
                         !localStorage.getItem(record.id+'score') ? (() => {
                             localStorage.setItem(record.id+'score', record.score)
                             let score = localStorage.getItem(record.id+'score')
-    
+                            console.log(`from inside the reply:${record.id}`)
                             return(
                                 <p id={record.id+'current'}>{score}</p>
                             )
                         })() : (() => {
                             let score = localStorage.getItem(record.id+'score')
+                            console.log(`from inside the reply:${record.id}`)
+                            console.log(record)
                             return(
                                 <p id={record.id+'current'}>{score}</p>
                             )
                         })()
-                    }
+                    } */}
+
+                    
+                         <p id={record.id+'current'}>{record.score}</p>
+
+                    
+
                 </div>
                 <div id="replyMinus">
                     <button onClick={handleMinus} className='flex items-center'>

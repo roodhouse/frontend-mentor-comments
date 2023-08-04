@@ -3,6 +3,8 @@ import Header from './comment/Header'
 import Body from './comment/Body'
 import Footer from './comment/Footer'
 
+// move reply component here if there are replies then find them from here. that way we can track the parent component
+
 function Comment({allComments}) {
 
   return (
@@ -23,6 +25,7 @@ function Comment({allComments}) {
                                 <Footer record={record} />
                             </div>
                         </div>
+
                     )
                 })
             }

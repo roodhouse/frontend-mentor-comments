@@ -12,7 +12,7 @@ function Reply({record, loggedIn}) {
                 record.replies.map(reply => {
                     return(
                         <>
-                        <div id={reply.id} className='bg-white mb-4 p-4 rounded-lg'>
+                        <div id={reply.id} className='reply bg-white mb-4 p-4 rounded-lg'>
                             <div id='replyHeaderWrapper' className=''>
                                 <ReplyHeader record={reply} loggedIn={loggedIn} />
                             </div>

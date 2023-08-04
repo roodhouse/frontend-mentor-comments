@@ -21,7 +21,8 @@ import Delete from './components/Delete';
 
   let loggedIn = allComments.currentUser.username
 
-
+  console.log(`from app.js`)
+  console.log(allComments)
   // const newComment = {
   //   content: 'Hi there',
   //   createdAt: 'Today',

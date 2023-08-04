@@ -7,7 +7,7 @@ function Footer({record}) {
 
     function handlePlus(e) {
         let increase = localStorage.getItem(record.id+'score')
-        increase = parseInt(increase)
+        // increase = parseInt(increase)
         increase = ++increase
         localStorage.setItem(record.id+'score', increase)
         e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
