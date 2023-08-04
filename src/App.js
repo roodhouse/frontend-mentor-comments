@@ -7,6 +7,8 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // reply button click logic
+    // save new reply to local storage
+    // change the data on load to come from ls rather than data file
   // edit button click logic
   // send button logic
   // cancel button logic
