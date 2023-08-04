@@ -3,7 +3,7 @@ import ReplyHeader from './reply/ReplyHeader'
 import ReplyBody from './reply/ReplyBody'
 import ReplyFooter from './reply/ReplyFooter'
 
-function Reply({record}) {
+function Reply({record, loggedIn}) {
 
   return (
     <>
@@ -12,15 +12,15 @@ function Reply({record}) {
                 record.replies.map(reply => {
                     return(
                         <>
-                        <div id={record.id} className='bg-white mb-4 p-4 rounded-lg'>
+                        <div id={reply.id} className='reply bg-white mb-4 p-4 rounded-lg'>
                             <div id='replyHeaderWrapper' className=''>
-                                <ReplyHeader record={reply} />
+                                <ReplyHeader record={reply} loggedIn={loggedIn} />
                             </div>
                             <div id='replyBodyWrapper' className='mb-4'>
                                 <ReplyBody record={reply} />
                             </div>
                             <div id="replyFooterWrapper">
-                                <ReplyFooter record={reply} />
+                                <ReplyFooter record={reply} loggedIn={loggedIn} />
                             </div>
                         </div>
                         </>

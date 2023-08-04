@@ -4,7 +4,7 @@ function ReplyBody({record}) {
   return (
     <>
         <div id="replyBodyContainer" className='text-grayishBlue text-base font-normal leading-6'>
-            <p>{record.content}</p>
+            <p><span className='text-moderateBlue'>@{record.replyingTo}</span> {record.content}</p>
         </div>
     </>
   )

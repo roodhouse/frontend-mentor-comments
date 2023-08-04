@@ -1,6 +1,7 @@
 import React from 'react'
 
-function ReplyHeader({record}) {
+function ReplyHeader({record, loggedIn}) {
+
   return (
     <>
         <div id="replyHeaderContainer" className='flex items-center mb-4'>         
@@ -10,12 +11,18 @@ function ReplyHeader({record}) {
             <div id="replyCommentName" className='text-darkBlue text-base font-medium leading-normal mr-4'>
                 <p>{record.user.username}</p>
             </div>
+            { 
+                loggedIn === record.user.username ? (
+                    <div id="youDiv" className='bg-moderateBlue rounded-[2px] text-white text-[13px] font-medium px-[6px] mr-4'>
+                        <p>you</p>
+                    </div>
+                ) : (
+                    ""
+                )
+             }
             <div id="replyTime" className='text-grayishBlue text-base font-normal leading-6'>
                 <p>{record.createdAt}</p>
-            </div>
-                    
-                
-            
+            </div>  
         </div>
     </>
   )

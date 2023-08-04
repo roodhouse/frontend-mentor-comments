@@ -1,3 +1,4 @@
+import React from 'react'
 import './App.css';
 import Comment from './components/Comment'
 import Add from './components/Add';
@@ -5,36 +6,69 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
+  // reply button click logic
+    // save new reply to local storage
+      // save reply as an object with the user details and comment
+      // overview of ls https://blog.logrocket.com/localstorage-javascript-complete-guide/
+  // edit button click logic
+  // send button logic
+  // cancel button logic
+  // confirm button logic
 
-  // add logic for "you"  and delete buttons
-// delete module
+  localStorage.setItem('allComments', JSON.stringify(Data))
+  let allComments = localStorage.getItem('allComments')
+  allComments = JSON.parse(allComments)
+
+  let loggedIn = allComments.currentUser.username
+
+  console.log(`from app.js`)
+  console.log(allComments)
+  // const newComment = {
+  //   content: 'Hi there',
+  //   createdAt: 'Today',
+  //   id: 7,
+  //   replies: [],
+  //   score: 0,
+  //   user: {
+  //     username: 'john',
+  //     image: 'none'
+  //   }
+  // }
+
+  // let currentComments = allComments.comments
+  // // allComments.comments.push(newComment)
+
+  // console.log(currentComments)
+
+  // currentComments.push(newComment)
 
 function App() {
+  
   return (
     <div className="App" id='app'>
       <div id='mainWrapper'>
         <div id='mainContainer' className='bg-veryLightGray py-8'>
           <div id='commentReplyWrapper' className=' px-4'>
             <div id='commentWrapper'>
-              <Comment />
+              <Comment allComments={allComments} />
             </div>
             {
-              Data && Data.comments.map(record => {
+              allComments && allComments.comments.map(record => {
                 return(
                   record.replies.length > 0 ? (
                     <div id='replyWrapper'>
-                      <Reply record={record} />
+                      <Reply record={record} loggedIn={loggedIn} />
                     </div>
+
                   ) : (
                     ""
                   )
                 )
               })
             }
-
           </div>
           <div id='addCommentWrapper' className='px-4'>
-            <Add />
+            <Add allComments={allComments} />
           </div>
           <div id='deleteWrapper' className='hidden'>
             <Delete />
