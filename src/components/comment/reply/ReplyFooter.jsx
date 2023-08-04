@@ -5,7 +5,7 @@ import Reply from '../../../images/icon-reply.svg'
 import Delete from '../../../images/icon-delete.svg'
 import Edit from '../../../images/icon-edit.svg'
 
-function ReplyFooter({record, loggedIn}) {
+function ReplyFooter({record, loggedIn, index, replyIndex}) {
 
     let theComments = localStorage.getItem('allComments')
     theComments = JSON.parse(theComments)
@@ -13,24 +13,38 @@ function ReplyFooter({record, loggedIn}) {
     function handlePlus(e) {
         // get id of the sister comment and then the parent comment
         let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
-        console.log(sisterComment)
-        console.log(sisterComment.parentElement.parentElement.previousSibling)
+        
+        let parentComment = sisterComment.parentElement.parentElement.parentElement
 
-        // if(parentComment.classList.contains('reply')) {
+        if(sisterComment.classList.contains('reply')) {
             
-        //     parentComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement.id
-        //     console.log(record)
+            sisterComment = sisterComment.id
+            parentComment = parentComment.id
+            sisterComment = parseInt(sisterComment)
+            parentComment = parseInt(parentComment)
+            
+            parentComment = theComments.comments[index]
+            sisterComment = parentComment.replies[replyIndex]
+
+            console.log(parentComment)
+            console.log(sisterComment)
+
+            sisterComment.score = ++sisterComment.score
+
+            console.log(sisterComment)
+            console.log(parentComment)
             
             
-        //     record.score = ++record.score
+            localStorage.setItem('allComments', JSON.stringify(theComments))
+
+            let seeComments = localStorage.getItem('allComments')
+            seeComments = JSON.parse(seeComments)
+            console.log(seeComments)
             
-        //     localStorage.setItem('allComments', JSON.stringify(record))
-        //     theComments = localStorage.getItem('allComments')
-        //     theComments = JSON.parse(theComments)
-        //     console.log(theComments)
-        //     e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = record.score
             
-        // }
+            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = sisterComment.score
+            
+        }
 
         // go down and update the plus/minus functions to getting data from theComments var rather than the custom LS, then continue here.
 

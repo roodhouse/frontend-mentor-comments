@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css';
 import Comment from './components/Comment'
 import Add from './components/Add';
@@ -15,14 +15,10 @@ import Delete from './components/Delete';
   // cancel button logic
   // confirm button logic
 
-  localStorage.setItem('allComments', JSON.stringify(Data))
-  let allComments = localStorage.getItem('allComments')
-  allComments = JSON.parse(allComments)
+  
+// **** i have set to load from LS.... need to understand what is being passed around to other components and go from there
+  
 
-  let loggedIn = allComments.currentUser.username
-
-  console.log(`from app.js`)
-  console.log(allComments)
   // const newComment = {
   //   content: 'Hi there',
   //   createdAt: 'Today',
@@ -43,6 +39,23 @@ import Delete from './components/Delete';
   // currentComments.push(newComment)
 
 function App() {
+
+  const [storage, setStorage] = useState(JSON.parse(localStorage.getItem('allComments')))
+  const [loggedIn, setLoggedIn] = useState('joe')
+  console.log(storage)
+
+  useEffect(() => {
+    if (localStorage.getItem('allComments') === null ) {
+      console.log('hi')
+      localStorage.setItem('allComments', JSON.stringify(Data))
+      let allComments = localStorage.getItem('allComments')
+      allComments = JSON.parse(allComments)
+      setStorage(allComments)
+  
+      let loggedIn = allComments.currentUser.username
+      setLoggedIn(loggedIn)
+    }
+  },[])
   
   return (
     <div className="App" id='app'>
@@ -50,9 +63,9 @@ function App() {
         <div id='mainContainer' className='bg-veryLightGray py-8'>
           <div id='commentReplyWrapper' className=' px-4'>
             <div id='commentWrapper'>
-              <Comment allComments={allComments} />
+              <Comment allComments={storage} loggedIn={loggedIn} />
             </div>
-            {
+            {/* {
               allComments && allComments.comments.map(record => {
                 return(
                   record.replies.length > 0 ? (
@@ -65,14 +78,14 @@ function App() {
                   )
                 )
               })
-            }
+            } */}
           </div>
-          <div id='addCommentWrapper' className='px-4'>
-            <Add allComments={allComments} />
+          {/* <div id='addCommentWrapper' className='px-4'>
+            <Add allComments={storage} />
           </div>
           <div id='deleteWrapper' className='hidden'>
             <Delete />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
