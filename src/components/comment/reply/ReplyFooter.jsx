@@ -5,10 +5,8 @@ import Reply from '../../../images/icon-reply.svg'
 import Delete from '../../../images/icon-delete.svg'
 import Edit from '../../../images/icon-edit.svg'
 
-function ReplyFooter({record}) {
- 
-    let loggedIn = localStorage.getItem('username')
-
+function ReplyFooter({record, loggedIn}) {
+    
     function handlePlus(e) {
         let increase = localStorage.getItem(record.id+'score')
         increase = parseInt(increase)

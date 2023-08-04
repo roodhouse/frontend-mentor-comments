@@ -20,7 +20,7 @@ function Reply({record, loggedIn}) {
                                 <ReplyBody record={reply} />
                             </div>
                             <div id="replyFooterWrapper">
-                                <ReplyFooter record={reply} />
+                                <ReplyFooter record={reply} loggedIn={loggedIn} />
                             </div>
                         </div>
                         </>
