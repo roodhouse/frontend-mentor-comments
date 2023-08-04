@@ -21,6 +21,27 @@ import Delete from './components/Delete';
 
   let loggedIn = allComments.currentUser.username
 
+  console.log(allComments)
+
+  // const newComment = {
+  //   content: 'Hi there',
+  //   createdAt: 'Today',
+  //   id: 7,
+  //   replies: [],
+  //   score: 0,
+  //   user: {
+  //     username: 'john',
+  //     image: 'none'
+  //   }
+  // }
+
+  // let currentComments = allComments.comments
+  // // allComments.comments.push(newComment)
+
+  // console.log(currentComments)
+
+  // currentComments.push(newComment)
+
 function App() {
 
   useEffect(() => {
