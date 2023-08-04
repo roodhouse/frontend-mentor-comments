@@ -1,6 +1,7 @@
 import React from 'react'
 
 function Header({record}) {
+
   return (
     <>
         <div id="headerContainer" className='flex items-center mb-4'>

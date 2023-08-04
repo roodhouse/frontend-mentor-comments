@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'
 import './App.css';
 import Comment from './components/Comment'
 import Add from './components/Add';
@@ -5,8 +6,6 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // counter logic
-  // add logic for "you"  and delete buttons
   // reply button click logic
   // edit button click logic
   // send button logic
@@ -14,6 +13,13 @@ import Delete from './components/Delete';
   // confirm button logic
 
 function App() {
+
+  useEffect(() => {
+    if (!localStorage.getItem('username')) {
+      localStorage.setItem('username', Data.currentUser.username)
+    } 
+  })
+  
   return (
     <div className="App" id='app'>
       <div id='mainWrapper'>
@@ -35,7 +41,6 @@ function App() {
                 )
               })
             }
-
           </div>
           <div id='addCommentWrapper' className='px-4'>
             <Add />

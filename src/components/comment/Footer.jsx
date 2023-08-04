@@ -5,16 +5,25 @@ import Reply from '../../images/icon-reply.svg'
 
 function Footer({record}) {
 
-    function handlePlus() {
-        console.log('boom')
+    function handlePlus(e) {
         let increase = localStorage.getItem(record.id+'score')
-        console.log(increase)
         increase = parseInt(increase)
-        console.log(typeof increase)
         increase = ++increase
         localStorage.setItem(record.id+'score', increase)
-        console.log(increase)
-        document.getElementById('scoreContainer').firstChild.innerHTML = localStorage.getItem(record.id+'score')
+        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+    }
+
+    function handleMinus(e) {
+        let decrease = localStorage.getItem(record.id+'score')
+        decrease = parseInt(decrease)
+        if (decrease === 0) {
+            return
+        } else {
+            decrease = --decrease
+            localStorage.setItem(record.id+'score', decrease)
+            console.log(e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML)
+            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+        }
     }
   return (
 
@@ -45,7 +54,9 @@ function Footer({record}) {
                     }
                 </div>
                 <div id="minus">
-                    <img src={Minus} alt="Minus" />
+                    <button onClick={handleMinus} className='flex items-center'>
+                        <img src={Minus} alt="Minus" />
+                    </button>
                 </div>
             </div>
             <div id="replyContainer" className='flex items-center'>
