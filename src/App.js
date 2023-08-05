@@ -17,45 +17,68 @@ import Delete from './components/Delete';
   // cancel button logic
   // confirm button logic
 
-  
-
-  // const newComment = {
-  //   content: 'Hi there',
-  //   createdAt: 'Today',
-  //   id: 7,
-  //   replies: [],
-  //   score: 0,
-  //   user: {
-  //     username: 'john',
-  //     image: 'none'
-  //   }
-  // }
-
-  // let currentComments = allComments.comments
-  // // allComments.comments.push(newComment)
-
-  // console.log(currentComments)
-
-  // currentComments.push(newComment)
 
 function App() {
 
-  const [storage, setStorage] = useState(JSON.parse(localStorage.getItem('allComments')))
+  const [storage, setStorage] = useState(null)
   const [loggedIn, setLoggedIn] = useState('joe')
-  console.log(storage)
 
   useEffect(() => {
     if (localStorage.getItem('allComments') === null ) {
-      console.log('hi')
       localStorage.setItem('allComments', JSON.stringify(Data))
       let allComments = localStorage.getItem('allComments')
       allComments = JSON.parse(allComments)
       setStorage(allComments)
-  
+
       let loggedIn = allComments.currentUser.username
       setLoggedIn(loggedIn)
+    } else {
+      let allComments = JSON.parse(localStorage.getItem('allComments'))
+      setStorage(allComments)
     }
   },[])
+
+  function onSubmit(e) {
+    e.preventDefault()
+    
+    let theContent = e.target.parentElement.parentElement.previousSibling.firstChild.value
+    let newId = storage.comments.slice(-1)
+    newId = newId[0].id
+    newId = ++newId
+
+    let newPng = storage.currentUser.image.png
+    let newWebp = storage.currentUser.image.webp
+    let newUsername = storage.currentUser.username
+     
+    const newResponse = {
+        content: theContent,
+        createdAt: 'today',
+        id: newId,
+        replies: [],
+        score: 0,
+        user: {
+            image: {
+                png: newPng,
+                webp: newWebp
+            },
+            username: newUsername
+        }
+
+    }
+
+    const updatedStorage = {
+      ...storage,
+      comments: [...storage.comments, newResponse]
+    }
+
+    localStorage.setItem('allComments', JSON.stringify(updatedStorage))
+    setStorage(updatedStorage)
+
+    theContent = e.target.parentElement.parentElement.previousSibling.firstChild
+    theContent.innerHTML = ''
+    theContent.value = ''
+
+}
   
   return (
     <div className="App" id='app'>
@@ -67,7 +90,7 @@ function App() {
             </div>
           </div>
           <div id='addCommentWrapper' className='px-4'>
-            <Add allComments={storage} loggedIn={loggedIn} />
+            <Add allComments={storage} loggedIn={loggedIn} onSubmit={onSubmit} />
           </div>
           <div id='deleteWrapper' className='hidden'>
             <Delete />

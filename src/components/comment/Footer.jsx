@@ -10,10 +10,7 @@ function Footer({record, loggedin, index}) {
 
     function handlePlus(e) {
         // get id of the response
-        console.log(e.target)
-        console.log(index)
         let parentComment = theComments.comments[index]
-        console.log(parentComment)
         parentComment.score = ++parentComment.score
         localStorage.setItem('allComments', JSON.stringify(theComments))
         
@@ -22,16 +19,10 @@ function Footer({record, loggedin, index}) {
 
     function handleMinus(e) {
         // get id of the response
-        console.log(e.target)
-        console.log(index)
-
-
         let parentComment = theComments.comments[index]
-        console.log(parentComment)
         if (parentComment.score === 0) {
             return
         } else {
-            console.log(parentComment.score)
             parentComment.score = --parentComment.score
             localStorage.setItem('allComments', JSON.stringify(theComments))
             e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = parentComment.score
