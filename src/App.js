@@ -7,7 +7,6 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // bug 1: cant update more than one +/- at a time
-  // bug 2: icon on reply window not showing
 
   // reply button click logic
     // save new reply to local storage
@@ -18,8 +17,6 @@ import Delete from './components/Delete';
   // cancel button logic
   // confirm button logic
 
-  
-// **** i have set to load from LS.... need to understand what is being passed around to other components and go from there
   
 
   // const newComment = {
