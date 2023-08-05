@@ -9,6 +9,8 @@ import Delete from './components/Delete';
   // bug 1: cant update more than one +/- at a time
 
   // reply button click logic
+    // reply of main comment
+    // reply of subcomment
     // save new reply to local storage
       // save reply as an object with the user details and comment
       // overview of ls https://blog.logrocket.com/localstorage-javascript-complete-guide/
@@ -77,8 +79,38 @@ function App() {
     theContent = e.target.parentElement.parentElement.previousSibling.firstChild
     theContent.innerHTML = ''
     theContent.value = ''
-
 }
+
+
+  // function imageSrc() {
+  //  if  (storage === null) {
+  //     return ""
+  //  } else {
+
+  //    return storage.currentUser.image.webp
+  //  }
+  
+  // }
+
+  
+
+  function handleReply(e) {
+    console.log('yipee')
+    let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling
+    replyBox.classList.remove('hidden')
+    replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY'
+
+    let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild
+    console.log(replyButton)
+
+    replyButton.addEventListener('click', (e) => {
+      e.preventDefault()
+      // run the onSubmit algo with updated elements...
+      console.log('lick')
+    })
+    
+
+  }
   
   return (
     <div className="App" id='app'>
@@ -86,7 +118,7 @@ function App() {
         <div id='mainContainer' className='bg-veryLightGray py-8'>
           <div id='commentReplyWrapper' className=' px-4'>
             <div id='commentWrapper'>
-              <Comment allComments={storage} loggedIn={loggedIn} />
+              <Comment allComments={storage} loggedIn={loggedIn} handleReply={handleReply} />
             </div>
           </div>
           <div id='addCommentWrapper' className='px-4'>

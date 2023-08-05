@@ -2,42 +2,6 @@ import React from 'react'
 
 function Add({allComments, loggedIn, onSubmit}) {
 
-    // function onSubmit(e) {
-    //     e.preventDefault()
-    //     console.log('hi')
-    //     console.log(allComments)
-        
-    //     let theContent = e.target.parentElement.parentElement.previousSibling.firstChild.value
-    //     let newId = allComments.comments.slice(-1)
-    //     newId = newId[0].id
-    //     newId = ++newId
-
-    //     let newPng = allComments.currentUser.image.png
-    //     let newWebp = allComments.currentUser.image.webp
-    //     let newUsername = allComments.currentUser.username
-         
-    //     const newResponse = {
-    //         content: theContent,
-    //         createdAt: 'today',
-    //         id: newId,
-    //         replies: [],
-    //         score: 0,
-    //         user: {
-    //             image: {
-    //                 png: newPng,
-    //                 webp: newWebp
-    //             },
-    //             username: newUsername
-    //         }
-
-    //     }
-
-    //     console.log(newResponse)
-    //     allComments.comments.push(newResponse)
-    //     localStorage.setItem('allComments', JSON.stringify(allComments))
-
-    // }
-
   return (
     <>
         <div id="addCommentContainer" className='bg-white rounded-lg p-4'>

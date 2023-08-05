@@ -3,7 +3,7 @@ import Plus from '../../images/icon-plus.svg'
 import Minus from '../../images/icon-minus.svg'
 import Reply from '../../images/icon-reply.svg'
 
-function Footer({record, loggedin, index}) {
+function Footer({record, loggedin, index, handleReply}) {
 
     let theComments = localStorage.getItem('allComments')
     theComments = JSON.parse(theComments)
@@ -47,7 +47,7 @@ function Footer({record, loggedin, index}) {
                     </button>
                 </div>
             </div>
-            <div id="replyContainer" className='flex items-center'>
+            <div id="replyContainer" onClick={handleReply} className='flex items-center'>
                 <div id="replyIcon" className='mr-2'>
                     <img src={Reply} alt="Reply" />
                 </div>
