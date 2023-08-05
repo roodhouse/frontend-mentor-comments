@@ -3,26 +3,38 @@ import Plus from '../../images/icon-plus.svg'
 import Minus from '../../images/icon-minus.svg'
 import Reply from '../../images/icon-reply.svg'
 
-function Footer({record}) {
+function Footer({record, loggedin, index}) {
+
+    let theComments = localStorage.getItem('allComments')
+    theComments = JSON.parse(theComments)
 
     function handlePlus(e) {
-        let increase = localStorage.getItem(record.id+'score')
-        // increase = parseInt(increase)
-        increase = ++increase
-        localStorage.setItem(record.id+'score', increase)
-        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+        // get id of the response
+        console.log(e.target)
+        console.log(index)
+        let parentComment = theComments.comments[index]
+        console.log(parentComment)
+        parentComment.score = ++parentComment.score
+        localStorage.setItem('allComments', JSON.stringify(theComments))
+        
+        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = parentComment.score
     }
 
     function handleMinus(e) {
-        let decrease = localStorage.getItem(record.id+'score')
-        decrease = parseInt(decrease)
-        if (decrease === 0) {
+        // get id of the response
+        console.log(e.target)
+        console.log(index)
+
+
+        let parentComment = theComments.comments[index]
+        console.log(parentComment)
+        if (parentComment.score === 0) {
             return
         } else {
-            decrease = --decrease
-            localStorage.setItem(record.id+'score', decrease)
-            console.log(e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML)
-            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+            console.log(parentComment.score)
+            parentComment.score = --parentComment.score
+            localStorage.setItem('allComments', JSON.stringify(theComments))
+            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = parentComment.score
         }
     }
   return (
@@ -36,22 +48,7 @@ function Footer({record}) {
                     </button>
                 </div>
                 <div id="scoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px]'>
-            
-                    {
-                        !localStorage.getItem(record.id+'score') ? (() => {
-                            localStorage.setItem(record.id+'score', record.score)
-                            let score = localStorage.getItem(record.id+'score')
-                            console.log(score)
-                            return(
-                                <p>{score}</p>
-                            )
-                        })() : (() => {
-                            let score = localStorage.getItem(record.id+'score')
-                            return(
-                                <p>{score}</p>
-                            )
-                        })()
-                    }
+                    <p id={record.id+'current'}>{record.score}</p>
                 </div>
                 <div id="minus">
                     <button onClick={handleMinus} className='flex items-center'>

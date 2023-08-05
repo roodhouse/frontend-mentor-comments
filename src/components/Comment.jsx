@@ -27,7 +27,7 @@ function Comment({allComments, loggedIn}) {
                                 <Body record={record} />
                             </div>
                             <div id="commentFooterWrapper">
-                                <Footer record={record} />
+                                <Footer record={record} loggedIn={loggedIn} index={index} />
                             </div>
                             <div id='replyWrapper'>
                                  <Reply record={record} loggedIn={loggedIn} index={index} />
@@ -42,7 +42,7 @@ function Comment({allComments, loggedIn}) {
                                 <Body record={record} />
                             </div>
                             <div id="commentFooterWrapper">
-                                <Footer record={record} />
+                                <Footer record={record} loggedIn={loggedIn} index={index} />
                             </div>
                         </div>
                         )

@@ -1,7 +1,10 @@
 import React from 'react'
+import Favicon from '../images/favicon-32x32.png'
 
-function Add({allComments}) {
+function Add({allComments, loggedIn}) {
 
+    console.log(allComments)
+    console.log(loggedIn)
   return (
     <>
         <div id="addCommentContainer" className='bg-white rounded-lg p-4'>
@@ -12,7 +15,16 @@ function Add({allComments}) {
                     </div>
                     <div id="iconSendContainer" className='flex justify-between items-center'>
                         <div id="iconContainer" className='w-8 h-8'>
-                            <img src={allComments.currentUser.image.webp} alt="avatar" />
+                            {/* <img src={allComments.currentUser.image.webp} alt="avatar" />
+                            <img src=
+                            {
+                                allComments.currentUser === loggedIn ? (
+                                    allComments.currentUser.image.webp
+                                ) : (
+                                    Favicon
+                                )
+                            } 
+                                alt="avatar" /> */}
                         </div>
                         <div id="submitContainer" className='bg-moderateBlue text-white rounded-lg py-3 px-[30px]'>
                             <button type='submit'>SEND</button>

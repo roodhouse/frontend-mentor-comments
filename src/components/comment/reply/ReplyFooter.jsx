@@ -62,29 +62,7 @@ function ReplyFooter({record, loggedIn, index, replyIndex}) {
                     </button>
                 </div>
                 <div id="replyScoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px]'>
-                    {/* {
-                        !localStorage.getItem(record.id+'score') ? (() => {
-                            localStorage.setItem(record.id+'score', record.score)
-                            let score = localStorage.getItem(record.id+'score')
-                            console.log(`from inside the reply:${record.id}`)
-                            return(
-                                <p id={record.id+'current'}>{score}</p>
-                            )
-                        })() : (() => {
-                            let score = localStorage.getItem(record.id+'score')
-                            console.log(`from inside the reply:${record.id}`)
-                            console.log(record)
-                            return(
-                                <p id={record.id+'current'}>{score}</p>
-                            )
-                        })()
-                    } */}
-
-                    
                          <p id={record.id+'current'}>{record.score}</p>
-
-                    
-
                 </div>
                 <div id="replyMinus">
                     <button onClick={handleMinus} className='flex items-center'>

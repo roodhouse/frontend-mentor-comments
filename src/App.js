@@ -6,6 +6,9 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
+  // bug 1: cant update more than one +/- at a time
+  // bug 2: icon on reply window not showing
+
   // reply button click logic
     // save new reply to local storage
       // save reply as an object with the user details and comment
@@ -65,23 +68,9 @@ function App() {
             <div id='commentWrapper'>
               <Comment allComments={storage} loggedIn={loggedIn} />
             </div>
-            {/* {
-              allComments && allComments.comments.map(record => {
-                return(
-                  record.replies.length > 0 ? (
-                    <div id='replyWrapper'>
-                      <Reply record={record} loggedIn={loggedIn} />
-                    </div>
-
-                  ) : (
-                    ""
-                  )
-                )
-              })
-            } */}
           </div>
           <div id='addCommentWrapper' className='px-4'>
-            <Add allComments={storage} />
+            <Add allComments={storage} loggedIn={loggedIn} />
           </div>
           <div id='deleteWrapper' className='hidden'>
             <Delete />
