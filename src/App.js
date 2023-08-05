@@ -9,6 +9,7 @@ import Delete from './components/Delete';
   // bug 1: cant update more than one +/- at a time
 
   // need to save reply of main comment into the thread
+    // if a comment has already been replied to, then the 2nd press of the reply button thows an error  <-- here !!
 
   // reply button click logic
     // reply of main comment
@@ -84,65 +85,55 @@ function App() {
 }
 
   function handleReply(e) {
-    
-    let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling
-    let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id)
-    let parentItem = storage.comments.find(item => item.id === parentComment)
-    let parentIndex;
-    
-    if (parentItem) {
-       parentIndex = storage.comments.findIndex(item => item.id === parentItem.id)
-
-    }
-
-    let newId;
-
-    if (parentItem.replies.length === 0 ) {
-      newId = 1
-    } else {
-      newId = parentItem.replies.length + 1
-    }
-    
-    let parent = storage.comments[parentIndex]
-    
-    replyBox.classList.remove('hidden')
-    replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY'
-
-    let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild
-    
-    replyButton.addEventListener('click', (f) => {
-      f.preventDefault()
-      
-      let theContent = f.target.parentElement.parentElement.parentElement.firstChild.firstChild.value
-
-      let newPng = storage.currentUser.image.png
-      let newWebp = storage.currentUser.image.webp
-      let newUsername = storage.currentUser.username
-
-      const newResponse = {
-        content: theContent,
-        createdAt: 'today',
-        id: newId,
-        replies: [],
-        score: 0,
-        user: {
+    let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling;
+    let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id);
+    let parentIndex = storage.comments.findIndex(item => item.id === parentComment);
+  
+    if (parentIndex !== -1) { // Make sure the parent comment is found
+  
+      replyBox.classList.remove('hidden');
+      replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY';
+  
+      let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild;
+  
+      replyButton.addEventListener('click', (f) => {
+        f.preventDefault();
+  
+        let theContent = f.target.parentElement.parentElement.parentElement.firstChild.firstChild.value;
+  
+        let newPng = storage.currentUser.image.png;
+        let newWebp = storage.currentUser.image.webp;
+        let newUsername = storage.currentUser.username;
+  
+        const newResponse = {
+          content: theContent,
+          createdAt: 'today',
+          id: storage.comments.length + 1, // You can generate new ID as needed
+          replies: [],
+          score: 0,
+          user: {
             image: {
-                png: newPng,
-                webp: newWebp
+              png: newPng,
+              webp: newWebp
             },
             username: newUsername
-        }
-
+          }
+        };
+  
+        const updatedComments = [...storage.comments];
+        updatedComments[parentIndex].replies.push(newResponse);
+  
+        const updatedStorage = {
+          ...storage,
+          comments: updatedComments
+        };
+  
+        localStorage.setItem('allComments', JSON.stringify(updatedStorage));
+        setStorage(updatedStorage);
+  
+        replyBox.classList.add('hidden');
+      });
     }
-
-    let currentReplies = storage.comments[parentIndex].replies
-    currentReplies.push(newResponse)
-
-    localStorage.setItem('allComments', JSON.stringify(storage))
-    setStorage(storage)
-      replyBox.classList.add('hidden')
-      
-    })
   }
   
   return (
