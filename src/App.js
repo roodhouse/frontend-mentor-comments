@@ -95,18 +95,79 @@ function App() {
   
 
   function handleReply(e) {
-    console.log('yipee')
+    
     let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling
+    let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id)
+    let parentItem = storage.comments.find(item => item.id === parentComment)
+    console.log(parentItem)
+    let parentIndex;
+    
+    if (parentItem) {
+       parentIndex = storage.comments.findIndex(item => item.id === parentItem.id)
+
+    }
+
+    let newId;
+
+    if (parentItem.replies.length === 0 ) {
+      newId = 1
+    } else {
+      newId = parentItem.replies.length + 1
+    }
+
+    console.log(newId)
+    
+    let parent = storage.comments[parentIndex]
+    console.log(parent)
+    
     replyBox.classList.remove('hidden')
     replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY'
 
     let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild
-    console.log(replyButton)
+    
 
-    replyButton.addEventListener('click', (e) => {
-      e.preventDefault()
+    replyButton.addEventListener('click', (f) => {
+      f.preventDefault()
       // run the onSubmit algo with updated elements...
-      console.log('lick')
+      let theContent = f.target.parentElement.parentElement.parentElement.firstChild.firstChild.value
+
+      let newPng = storage.currentUser.image.png
+    let newWebp = storage.currentUser.image.webp
+    let newUsername = storage.currentUser.username
+
+      const newResponse = {
+        content: theContent,
+        createdAt: 'today',
+        id: newId,
+        replies: [],
+        score: 0,
+        user: {
+            image: {
+                png: newPng,
+                webp: newWebp
+            },
+            username: newUsername
+        }
+
+    }
+
+    console.log(newResponse)
+
+    // how to update localstorage with a new reply to a comment ??? ****
+
+    // const updatedStorage = {
+    //   ...storage,
+    //   comments: {
+    //     ...storage.comments,
+    //     replies: [storage.comments.replies, newResponse]
+    //   }
+    // }
+
+
+    // localStorage.setItem('allComments', JSON.stringify(updatedStorage))
+    // setStorage(updatedStorage)
+      // replyBox.classList.add('hidden')
+      
     })
     
 
