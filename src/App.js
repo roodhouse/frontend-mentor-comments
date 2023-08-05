@@ -153,7 +153,7 @@ function App() {
 
     console.log(newResponse)
 
-    // how to update localstorage with a new reply to a comment ??? ****
+    // how to update localstorage with a new reply to a comment ??? **** error is thrown with the below
 
     // const updatedStorage = {
     //   ...storage,
@@ -166,7 +166,7 @@ function App() {
 
     // localStorage.setItem('allComments', JSON.stringify(updatedStorage))
     // setStorage(updatedStorage)
-      // replyBox.classList.add('hidden')
+    //   replyBox.classList.add('hidden')
       
     })
     
