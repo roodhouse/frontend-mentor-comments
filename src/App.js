@@ -10,6 +10,7 @@ import Delete from './components/Delete';
 
   // need to save reply of main comment into the thread
     // if a comment has already been replied to, then the 2nd press of the reply button thows an error  <-- here !!
+      // problem might be where I have the divs located in the comments.jsx file... move the bottomon one up and try again
 
   // reply button click logic
     // reply of main comment
@@ -86,13 +87,16 @@ function App() {
 
   function handleReply(e) {
     let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling;
+    console.log(replyBox)
     let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id);
     let parentIndex = storage.comments.findIndex(item => item.id === parentComment);
   
     if (parentIndex !== -1) { // Make sure the parent comment is found
-  
+      
       replyBox.classList.remove('hidden');
+      // replyBox.firstChild.firstChild.firstChild.parentElement.parentElement.parentElement.nextSibling.classList.remove('hidden')
       replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY';
+      console.log('looking for error..')
   
       let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild;
   
@@ -133,7 +137,7 @@ function App() {
   
         replyBox.classList.add('hidden');
       });
-    }
+    } 
   }
   
   return (
