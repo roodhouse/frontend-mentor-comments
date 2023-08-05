@@ -80,12 +80,12 @@ function App() {
               })
             } */}
           </div>
-          {/* <div id='addCommentWrapper' className='px-4'>
+          <div id='addCommentWrapper' className='px-4'>
             <Add allComments={storage} />
           </div>
           <div id='deleteWrapper' className='hidden'>
             <Delete />
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

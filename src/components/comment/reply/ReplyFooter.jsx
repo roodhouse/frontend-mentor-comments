@@ -20,51 +20,35 @@ function ReplyFooter({record, loggedIn, index, replyIndex}) {
             
             sisterComment = sisterComment.id
             parentComment = parentComment.id
-            sisterComment = parseInt(sisterComment)
-            parentComment = parseInt(parentComment)
             
             parentComment = theComments.comments[index]
             sisterComment = parentComment.replies[replyIndex]
 
-            console.log(parentComment)
-            console.log(sisterComment)
-
             sisterComment.score = ++sisterComment.score
-
-            console.log(sisterComment)
-            console.log(parentComment)
-            
-            
             localStorage.setItem('allComments', JSON.stringify(theComments))
-
-            let seeComments = localStorage.getItem('allComments')
-            seeComments = JSON.parse(seeComments)
-            console.log(seeComments)
-            
-            
-            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = sisterComment.score
-            
+            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = sisterComment.score   
         }
-
-        // go down and update the plus/minus functions to getting data from theComments var rather than the custom LS, then continue here.
-
-        // let increase = localStorage.getItem(record.id+'score')
-        // // let increase = theComments.
-        // increase = parseInt(increase)
-        // increase = ++increase
-        // localStorage.setItem(record.id+'score', increase)
-        // e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
     }
 
     function handleMinus(e) {
-        let decrease = localStorage.getItem(record.id+'score')
-        decrease = parseInt(decrease)
-        if (decrease === 0) {
-            return
-        } else {
-            decrease = --decrease
-            localStorage.setItem(record.id+'score', decrease)
-            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+        // get id of the sister comment and then the parent comment
+        let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
+        let parentComment = sisterComment.parentElement.parentElement.parentElement
+
+        if(sisterComment.classList.contains('reply')) {
+            sisterComment = sisterComment.id
+            parentComment = parentComment.id
+
+            parentComment = theComments.comments[index]
+            sisterComment = parentComment.replies[replyIndex]
+
+            if (sisterComment.score === 0){
+                return
+            } else {
+                sisterComment.score = --sisterComment.score
+                localStorage.setItem('allComments', JSON.stringify(theComments))
+                e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = sisterComment.score
+            }
         }
     }
 
