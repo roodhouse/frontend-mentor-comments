@@ -3,26 +3,29 @@ import Plus from '../../images/icon-plus.svg'
 import Minus from '../../images/icon-minus.svg'
 import Reply from '../../images/icon-reply.svg'
 
-function Footer({record}) {
+function Footer({record, loggedin, index, handleReply}) {
+
+    let theComments = localStorage.getItem('allComments')
+    theComments = JSON.parse(theComments)
 
     function handlePlus(e) {
-        let increase = localStorage.getItem(record.id+'score')
-        // increase = parseInt(increase)
-        increase = ++increase
-        localStorage.setItem(record.id+'score', increase)
-        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+        // get id of the response
+        let parentComment = theComments.comments[index]
+        parentComment.score = ++parentComment.score
+        localStorage.setItem('allComments', JSON.stringify(theComments))
+        
+        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = parentComment.score
     }
 
     function handleMinus(e) {
-        let decrease = localStorage.getItem(record.id+'score')
-        decrease = parseInt(decrease)
-        if (decrease === 0) {
+        // get id of the response
+        let parentComment = theComments.comments[index]
+        if (parentComment.score === 0) {
             return
         } else {
-            decrease = --decrease
-            localStorage.setItem(record.id+'score', decrease)
-            console.log(e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML)
-            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+            parentComment.score = --parentComment.score
+            localStorage.setItem('allComments', JSON.stringify(theComments))
+            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = parentComment.score
         }
     }
   return (
@@ -36,22 +39,7 @@ function Footer({record}) {
                     </button>
                 </div>
                 <div id="scoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px]'>
-            
-                    {
-                        !localStorage.getItem(record.id+'score') ? (() => {
-                            localStorage.setItem(record.id+'score', record.score)
-                            let score = localStorage.getItem(record.id+'score')
-                            console.log(score)
-                            return(
-                                <p>{score}</p>
-                            )
-                        })() : (() => {
-                            let score = localStorage.getItem(record.id+'score')
-                            return(
-                                <p>{score}</p>
-                            )
-                        })()
-                    }
+                    <p id={record.id+'current'}>{record.score}</p>
                 </div>
                 <div id="minus">
                     <button onClick={handleMinus} className='flex items-center'>
@@ -59,7 +47,7 @@ function Footer({record}) {
                     </button>
                 </div>
             </div>
-            <div id="replyContainer" className='flex items-center'>
+            <div id="replyContainer" onClick={handleReply} className='flex items-center'>
                 <div id="replyIcon" className='mr-2'>
                     <img src={Reply} alt="Reply" />
                 </div>

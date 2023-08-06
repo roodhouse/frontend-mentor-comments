@@ -5,7 +5,7 @@ import Reply from '../../../images/icon-reply.svg'
 import Delete from '../../../images/icon-delete.svg'
 import Edit from '../../../images/icon-edit.svg'
 
-function ReplyFooter({record, loggedIn}) {
+function ReplyFooter({record, loggedIn, index, replyIndex, handleReply}) {
 
     let theComments = localStorage.getItem('allComments')
     theComments = JSON.parse(theComments)
@@ -13,44 +13,42 @@ function ReplyFooter({record, loggedIn}) {
     function handlePlus(e) {
         // get id of the sister comment and then the parent comment
         let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
-        console.log(sisterComment)
-        console.log(sisterComment.parentElement.parentElement.previousSibling)
+        
+        let parentComment = sisterComment.parentElement.parentElement.parentElement
 
-        // if(parentComment.classList.contains('reply')) {
+        if(sisterComment.classList.contains('reply')) {
             
-        //     parentComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement.id
-        //     console.log(record)
+            sisterComment = sisterComment.id
+            parentComment = parentComment.id
             
-            
-        //     record.score = ++record.score
-            
-        //     localStorage.setItem('allComments', JSON.stringify(record))
-        //     theComments = localStorage.getItem('allComments')
-        //     theComments = JSON.parse(theComments)
-        //     console.log(theComments)
-        //     e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = record.score
-            
-        // }
+            parentComment = theComments.comments[index]
+            sisterComment = parentComment.replies[replyIndex]
 
-        // go down and update the plus/minus functions to getting data from theComments var rather than the custom LS, then continue here.
-
-        // let increase = localStorage.getItem(record.id+'score')
-        // // let increase = theComments.
-        // increase = parseInt(increase)
-        // increase = ++increase
-        // localStorage.setItem(record.id+'score', increase)
-        // e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+            sisterComment.score = ++sisterComment.score
+            localStorage.setItem('allComments', JSON.stringify(theComments))
+            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = sisterComment.score   
+        }
     }
 
     function handleMinus(e) {
-        let decrease = localStorage.getItem(record.id+'score')
-        decrease = parseInt(decrease)
-        if (decrease === 0) {
-            return
-        } else {
-            decrease = --decrease
-            localStorage.setItem(record.id+'score', decrease)
-            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = localStorage.getItem(record.id+'score')
+        // get id of the sister comment and then the parent comment
+        let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
+        let parentComment = sisterComment.parentElement.parentElement.parentElement
+
+        if(sisterComment.classList.contains('reply')) {
+            sisterComment = sisterComment.id
+            parentComment = parentComment.id
+
+            parentComment = theComments.comments[index]
+            sisterComment = parentComment.replies[replyIndex]
+
+            if (sisterComment.score === 0){
+                return
+            } else {
+                sisterComment.score = --sisterComment.score
+                localStorage.setItem('allComments', JSON.stringify(theComments))
+                e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = sisterComment.score
+            }
         }
     }
 
@@ -64,29 +62,7 @@ function ReplyFooter({record, loggedIn}) {
                     </button>
                 </div>
                 <div id="replyScoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px]'>
-                    {/* {
-                        !localStorage.getItem(record.id+'score') ? (() => {
-                            localStorage.setItem(record.id+'score', record.score)
-                            let score = localStorage.getItem(record.id+'score')
-                            console.log(`from inside the reply:${record.id}`)
-                            return(
-                                <p id={record.id+'current'}>{score}</p>
-                            )
-                        })() : (() => {
-                            let score = localStorage.getItem(record.id+'score')
-                            console.log(`from inside the reply:${record.id}`)
-                            console.log(record)
-                            return(
-                                <p id={record.id+'current'}>{score}</p>
-                            )
-                        })()
-                    } */}
-
-                    
                          <p id={record.id+'current'}>{record.score}</p>
-
-                    
-
                 </div>
                 <div id="replyMinus">
                     <button onClick={handleMinus} className='flex items-center'>
@@ -115,7 +91,7 @@ function ReplyFooter({record, loggedIn}) {
                         </div>
                     </div>
                 ) : (
-                    <div id="replyButtonContainer" className='flex items-center'>
+                    <div id="replyButtonContainer"  onClick={handleReply} className='flex items-center'>
                         <div id="replyButtonIcon" className='mr-2'>
                             <img src={Reply} alt="Reply" />
                         </div>
@@ -125,7 +101,6 @@ function ReplyFooter({record, loggedIn}) {
                     </div>
                 )
             }
-            
         </div>
     </>
   )

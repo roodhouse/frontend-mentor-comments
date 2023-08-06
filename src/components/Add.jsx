@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Add({allComments}) {
+function Add({allComments, loggedIn, onSubmit}) {
 
   return (
     <>
@@ -12,10 +12,18 @@ function Add({allComments}) {
                     </div>
                     <div id="iconSendContainer" className='flex justify-between items-center'>
                         <div id="iconContainer" className='w-8 h-8'>
-                            <img src={allComments.currentUser.image.webp} alt="avatar" />
+                            <img src=
+                            {
+                                allComments === null ? (
+                                    ""
+                                ) : (
+                                    allComments.currentUser.image.webp
+                                )
+                            } 
+                                alt="avatar" />
                         </div>
                         <div id="submitContainer" className='bg-moderateBlue text-white rounded-lg py-3 px-[30px]'>
-                            <button type='submit'>SEND</button>
+                            <button onClick={onSubmit} type='submit'>SEND</button>
                         </div>
                     </div>
                 </form>

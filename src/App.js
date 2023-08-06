@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css';
 import Comment from './components/Comment'
 import Add from './components/Add';
@@ -6,43 +6,207 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // reply button click logic
-    // save new reply to local storage
-      // save reply as an object with the user details and comment
-      // overview of ls https://blog.logrocket.com/localstorage-javascript-complete-guide/
+  // bug 1: cant update more than one +/- at a time
+  // bug 2: you logic not showing up when creating a brand new comment
+  // bug 3: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
+  // bug 4: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
+
+  
   // edit button click logic
   // send button logic
   // cancel button logic
   // confirm button logic
 
-  localStorage.setItem('allComments', JSON.stringify(Data))
-  let allComments = localStorage.getItem('allComments')
-  allComments = JSON.parse(allComments)
-
-  let loggedIn = allComments.currentUser.username
-
-  console.log(`from app.js`)
-  console.log(allComments)
-  // const newComment = {
-  //   content: 'Hi there',
-  //   createdAt: 'Today',
-  //   id: 7,
-  //   replies: [],
-  //   score: 0,
-  //   user: {
-  //     username: 'john',
-  //     image: 'none'
-  //   }
-  // }
-
-  // let currentComments = allComments.comments
-  // // allComments.comments.push(newComment)
-
-  // console.log(currentComments)
-
-  // currentComments.push(newComment)
 
 function App() {
+
+  const [storage, setStorage] = useState(null)
+  const [loggedIn, setLoggedIn] = useState('joe')
+
+  useEffect(() => {
+    if (localStorage.getItem('allComments') === null ) {
+      localStorage.setItem('allComments', JSON.stringify(Data))
+      let allComments = localStorage.getItem('allComments')
+      allComments = JSON.parse(allComments)
+      setStorage(allComments)
+
+      let loggedIn = allComments.currentUser.username
+      setLoggedIn(loggedIn)
+    } else {
+      let allComments = JSON.parse(localStorage.getItem('allComments'))
+      let loggedIn = allComments.currentUser.username
+      setStorage(allComments)
+      setLoggedIn(loggedIn)
+    }
+  },[])
+
+  function onSubmit(e) {
+    e.preventDefault()
+    
+    let theContent = e.target.parentElement.parentElement.previousSibling.firstChild.value
+    let newId = storage.comments.slice(-1)
+    newId = newId[0].id
+    newId = ++newId
+
+    let newPng = storage.currentUser.image.png
+    let newWebp = storage.currentUser.image.webp
+    let newUsername = storage.currentUser.username
+     
+    const newResponse = {
+        content: theContent,
+        createdAt: 'today',
+        id: newId,
+        replies: [],
+        score: 0,
+        user: {
+            image: {
+                png: newPng,
+                webp: newWebp
+            },
+            username: newUsername
+        }
+
+    }
+
+    const updatedStorage = {
+      ...storage,
+      comments: [...storage.comments, newResponse]
+    }
+
+    localStorage.setItem('allComments', JSON.stringify(updatedStorage))
+    setStorage(updatedStorage)
+
+    theContent = e.target.parentElement.parentElement.previousSibling.firstChild
+    theContent.innerHTML = ''
+    theContent.value = ''
+}
+
+  function handleReply(e) {
+    let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling;
+    let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id);
+    let parentIndex = storage.comments.findIndex(item => item.id === parentComment);
+    console.log(parentIndex)
+    
+    if (parentIndex !== -1) { // Make sure the parent comment is found
+      
+      let replyingTo = storage.comments[parentIndex].user.username
+      replyBox.classList.remove('hidden');
+      replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY';
+  
+      let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild;
+  
+      replyButton.addEventListener('click', (f) => {
+        f.preventDefault();
+  
+        let theContent = f.target.parentElement.parentElement.parentElement.firstChild.firstChild.value;
+  
+        let newPng = storage.currentUser.image.png;
+        let newWebp = storage.currentUser.image.webp;
+        let newUsername = storage.currentUser.username;
+  
+        const newResponse = {
+          content: theContent,
+          createdAt: 'today',
+          id: storage.comments.length + 1, // You can generate new ID as needed
+          replyingTo: replyingTo,
+          replies: [],
+          score: 0,
+          user: {
+            image: {
+              png: newPng,
+              webp: newWebp
+            },
+            username: newUsername
+          }
+        };
+  
+        const updatedComments = [...storage.comments];
+        updatedComments[parentIndex].replies.push(newResponse);
+  
+        const updatedStorage = {
+          ...storage,
+          comments: updatedComments
+        };
+  
+        localStorage.setItem('allComments', JSON.stringify(updatedStorage));
+        setStorage(updatedStorage);
+  
+        replyBox.classList.add('hidden');
+        theContent = replyBox.firstChild.firstChild.firstChild.firstChild.firstChild
+        theContent.innerHTML = ''
+        theContent.value = ''
+      });
+    } else if (parentIndex === -1) {
+      let grandparentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
+      let grandparentIndex = storage.comments.findIndex(item => item.id === grandparentComment);
+      
+      parentIndex = storage.comments[grandparentIndex].replies.findIndex(item => item.id === parentComment)
+
+      console.log(parentIndex)
+      
+        if (parentIndex !== -1) {
+          let replyingTo = storage.comments[grandparentIndex].replies[parentIndex].user.username
+          replyBox.classList.remove('hidden');
+
+          replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY';
+  
+          let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild;
+          console.log(replyButton)
+      
+          replyButton.addEventListener('click', (f) => {
+            f.preventDefault();
+            console.log('click')
+      
+            let theContent = f.target.parentElement.parentElement.parentElement.firstChild.firstChild.value;
+
+            console.log(theContent)
+      
+            let newPng = storage.currentUser.image.png;
+            let newWebp = storage.currentUser.image.webp;
+            let newUsername = storage.currentUser.username;
+      
+            const newResponse = {
+              content: theContent,
+              createdAt: 'today',
+              id: storage.comments[grandparentIndex].replies[parentIndex].replies.length + 1, // You can generate new ID as needed
+              replyingTo: replyingTo,
+              replies: [],
+              score: 0,
+              user: {
+                image: {
+                  png: newPng,
+                  webp: newWebp
+                },
+                username: newUsername
+              }
+            };
+
+            console.log(newResponse)
+      
+            const updatedComments = [...storage.comments];
+            console.log(updatedComments)
+            updatedComments[grandparentIndex].replies[parentIndex].replies.push(newResponse);
+            console.log(updatedComments)
+      
+            const updatedStorage = {
+              ...storage,
+              comments: updatedComments
+            };
+
+            console.log(updatedStorage)
+      
+            localStorage.setItem('allComments', JSON.stringify(updatedStorage));
+            setStorage(updatedStorage);
+      
+            replyBox.classList.add('hidden');
+            theContent = replyBox.firstChild.firstChild.firstChild.firstChild.firstChild
+            theContent.innerHTML = ''
+            theContent.value = ''
+          });
+          
+        }
+    }
+  }
   
   return (
     <div className="App" id='app'>
@@ -50,25 +214,11 @@ function App() {
         <div id='mainContainer' className='bg-veryLightGray py-8'>
           <div id='commentReplyWrapper' className=' px-4'>
             <div id='commentWrapper'>
-              <Comment allComments={allComments} />
+              <Comment allComments={storage} loggedIn={loggedIn} handleReply={handleReply} />
             </div>
-            {
-              allComments && allComments.comments.map(record => {
-                return(
-                  record.replies.length > 0 ? (
-                    <div id='replyWrapper'>
-                      <Reply record={record} loggedIn={loggedIn} />
-                    </div>
-
-                  ) : (
-                    ""
-                  )
-                )
-              })
-            }
           </div>
           <div id='addCommentWrapper' className='px-4'>
-            <Add allComments={allComments} />
+            <Add allComments={storage} loggedIn={loggedIn} onSubmit={onSubmit} />
           </div>
           <div id='deleteWrapper' className='hidden'>
             <Delete />
