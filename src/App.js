@@ -83,7 +83,6 @@ function App() {
 }
 
   function handleReply(e) {
-    console.log('handlerel')
     let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling;
     let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id);
     let parentIndex = storage.comments.findIndex(item => item.id === parentComment);
@@ -150,7 +149,6 @@ function App() {
           replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY';
   
           let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild;
-          console.log(replyButton)
       
           replyButton.addEventListener('click', (f) => {
             f.preventDefault();
@@ -213,7 +211,6 @@ function App() {
       currentText = removeText.innerHTML + currentText.innerHTML
       e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild.classList.add('hidden')
       let bodyContainer = e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild
-      console.log(bodyContainer)
       
       let editCommentWrapper = document.createElement('div')
       editCommentWrapper.setAttribute('id', 'editCommentWrapper')
@@ -259,41 +256,55 @@ function App() {
 
       updateButton.addEventListener('click', (e) => {
         e.preventDefault()
+        
         let parentIndex = storage.comments.findIndex(item => item.id === parentId);
-        let parentComment = storage.comments[parentIndex]
-        let commentIndex = parentComment.replies.findIndex(item => item.id === commentId)
-        let currentComment = parentComment.replies[commentIndex]
-        currentText = editComment.value
+        console.log(parentIndex)
+        if (parentIndex !== -1) {
+            let parentComment = storage.comments[parentIndex]
+            
+            if (parentComment.replies) {
+              
+                let commentIndex = parentComment.replies.findIndex(item => item.id === commentId)
+                let currentComment = parentComment.replies[commentIndex]
+                currentText = editComment.value
+        
+                let updatedComment = {
+                  "content" : currentText,
+                  "createdAt" : 'today',
+                  "id": currentComment.id,
+                  "replies": currentComment.replies,
+                  "replyingTo": currentComment.replyingTo,
+                  "score": currentComment.score,
+                  "user": {
+                    "image": {
+                      "png": currentComment.user.image.png,
+                      "webp": currentComment.user.image.webp
+                    },
+                    "username": currentComment.user.username
+                  }
+                }
+        
+                const updatedComments = [...storage.comments];
+                    updatedComments[parentIndex].replies[commentIndex] = updatedComment
+              
+                    const updatedStorage = {
+                      ...storage,
+                      comments: updatedComments
+                    };
+        
+                    localStorage.setItem('allComments', JSON.stringify(updatedStorage));
+                    setStorage(updatedStorage);
+                    // show updated comment
+                    e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove('hidden')
+                    bodyContainer.removeChild(editCommentWrapper)
+            } 
+        } else {
+          console.log('go')
 
-        let updatedComment = {
-          "content" : currentText,
-          "createdAt" : 'today',
-          "id": currentComment.id,
-          "replies": currentComment.replies,
-          "replyingTo": currentComment.replyingTo,
-          "score": currentComment.score,
-          "user": {
-            "image": {
-              "png": currentComment.user.image.png,
-              "webp": currentComment.user.image.webp
-            },
-            "username": currentComment.user.username
-          }
+          // need to fix up this elseblock
+
+          
         }
-
-        const updatedComments = [...storage.comments];
-            updatedComments[parentIndex].replies[commentIndex] = updatedComment
-      
-            const updatedStorage = {
-              ...storage,
-              comments: updatedComments
-            };
-
-            localStorage.setItem('allComments', JSON.stringify(updatedStorage));
-            setStorage(updatedStorage);
-            // show updated comment
-            e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove('hidden')
-            bodyContainer.removeChild(editCommentWrapper)
       })
 
     }
