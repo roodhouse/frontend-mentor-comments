@@ -5,7 +5,7 @@ import Reply from '../../../images/icon-reply.svg'
 import Delete from '../../../images/icon-delete.svg'
 import Edit from '../../../images/icon-edit.svg'
 
-function ReplyFooter({record, loggedIn, index, replyIndex}) {
+function ReplyFooter({record, loggedIn, index, replyIndex, handleReply}) {
 
     let theComments = localStorage.getItem('allComments')
     theComments = JSON.parse(theComments)
@@ -91,7 +91,7 @@ function ReplyFooter({record, loggedIn, index, replyIndex}) {
                         </div>
                     </div>
                 ) : (
-                    <div id="replyButtonContainer" className='flex items-center'>
+                    <div id="replyButtonContainer"  onClick={handleReply} className='flex items-center'>
                         <div id="replyButtonIcon" className='mr-2'>
                             <img src={Reply} alt="Reply" />
                         </div>
@@ -101,7 +101,6 @@ function ReplyFooter({record, loggedIn, index, replyIndex}) {
                     </div>
                 )
             }
-            
         </div>
     </>
   )

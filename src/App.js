@@ -7,13 +7,11 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // bug 1: cant update more than one +/- at a time
-  // bug 2: you logic not showing up at times
+  // bug 2: you logic not showing up when creating a brand new comment
+  // bug 3: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
+  // bug 4: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
 
-  // reply button click logic
-    // reply of subcomment
-    // save new reply to local storage
-      // save reply as an object with the user details and comment
-      // overview of ls https://blog.logrocket.com/localstorage-javascript-complete-guide/
+  
   // edit button click logic
   // send button logic
   // cancel button logic
@@ -36,7 +34,9 @@ function App() {
       setLoggedIn(loggedIn)
     } else {
       let allComments = JSON.parse(localStorage.getItem('allComments'))
+      let loggedIn = allComments.currentUser.username
       setStorage(allComments)
+      setLoggedIn(loggedIn)
     }
   },[])
 
@@ -85,9 +85,11 @@ function App() {
     let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling;
     let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id);
     let parentIndex = storage.comments.findIndex(item => item.id === parentComment);
-  
+    console.log(parentIndex)
+    
     if (parentIndex !== -1) { // Make sure the parent comment is found
       
+      let replyingTo = storage.comments[parentIndex].user.username
       replyBox.classList.remove('hidden');
       replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY';
   
@@ -106,6 +108,7 @@ function App() {
           content: theContent,
           createdAt: 'today',
           id: storage.comments.length + 1, // You can generate new ID as needed
+          replyingTo: replyingTo,
           replies: [],
           score: 0,
           user: {
@@ -133,7 +136,76 @@ function App() {
         theContent.innerHTML = ''
         theContent.value = ''
       });
-    } 
+    } else if (parentIndex === -1) {
+      let grandparentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
+      let grandparentIndex = storage.comments.findIndex(item => item.id === grandparentComment);
+      
+      parentIndex = storage.comments[grandparentIndex].replies.findIndex(item => item.id === parentComment)
+
+      console.log(parentIndex)
+      
+        if (parentIndex !== -1) {
+          let replyingTo = storage.comments[grandparentIndex].replies[parentIndex].user.username
+          replyBox.classList.remove('hidden');
+
+          replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML = 'REPLY';
+  
+          let replyButton = replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild;
+          console.log(replyButton)
+      
+          replyButton.addEventListener('click', (f) => {
+            f.preventDefault();
+            console.log('click')
+      
+            let theContent = f.target.parentElement.parentElement.parentElement.firstChild.firstChild.value;
+
+            console.log(theContent)
+      
+            let newPng = storage.currentUser.image.png;
+            let newWebp = storage.currentUser.image.webp;
+            let newUsername = storage.currentUser.username;
+      
+            const newResponse = {
+              content: theContent,
+              createdAt: 'today',
+              id: storage.comments[grandparentIndex].replies[parentIndex].replies.length + 1, // You can generate new ID as needed
+              replyingTo: replyingTo,
+              replies: [],
+              score: 0,
+              user: {
+                image: {
+                  png: newPng,
+                  webp: newWebp
+                },
+                username: newUsername
+              }
+            };
+
+            console.log(newResponse)
+      
+            const updatedComments = [...storage.comments];
+            console.log(updatedComments)
+            updatedComments[grandparentIndex].replies[parentIndex].replies.push(newResponse);
+            console.log(updatedComments)
+      
+            const updatedStorage = {
+              ...storage,
+              comments: updatedComments
+            };
+
+            console.log(updatedStorage)
+      
+            localStorage.setItem('allComments', JSON.stringify(updatedStorage));
+            setStorage(updatedStorage);
+      
+            replyBox.classList.add('hidden');
+            theContent = replyBox.firstChild.firstChild.firstChild.firstChild.firstChild
+            theContent.innerHTML = ''
+            theContent.value = ''
+          });
+          
+        }
+    }
   }
   
   return (

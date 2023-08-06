@@ -5,7 +5,6 @@ import Footer from './comment/Footer'
 import Reply from './comment/Reply'
 import Add from './Add'
 
-// move reply component here if there are replies then find them from here. that way we can track the parent component
 // fix css
 
 function Comment({allComments, loggedIn, handleReply, onSubmit}) {
@@ -34,7 +33,7 @@ function Comment({allComments, loggedIn, handleReply, onSubmit}) {
                                 <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
                             </div>
                             <div id='replyWrapper'>
-                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} />
+                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} />
                             </div>
                         </div>    
                         ) : (
