@@ -30,11 +30,11 @@ function Comment({allComments, loggedIn, handleReply, onSubmit}) {
                             <div id="commentFooterWrapper">
                                 <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} />
                             </div>
-                            <div id='replyWrapper'>
-                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} />
-                            </div>
                             <div id="replyCommentWrapper" className='hidden'>
                                 <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
+                            </div>
+                            <div id='replyWrapper'>
+                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} />
                             </div>
                         </div>    
                         ) : (
