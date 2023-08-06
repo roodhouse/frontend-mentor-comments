@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Header({record}) {
+function Header({record, loggedIn}) {
 
   return (
     <>
@@ -11,6 +11,15 @@ function Header({record}) {
             <div id="commentName" className='text-darkBlue text-base font-medium leading-normal mr-4'>
                 <p>{record.user.username}</p>
             </div>
+            { 
+                record.user.username === 'juliusomo' ? (
+                    <div id="youDiv" className='bg-moderateBlue rounded-[2px] text-white text-[13px] font-medium px-[6px] mr-4'>
+                        <p>you</p>
+                    </div>
+                ) : (
+                    "aa"
+                )
+             }
             <div id="commentTime" className='text-grayishBlue text-base font-normal leading-6'>
                 <p>{record.createdAt}</p>
             </div>

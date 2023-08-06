@@ -2,8 +2,10 @@ import React from 'react'
 import Plus from '../../images/icon-plus.svg'
 import Minus from '../../images/icon-minus.svg'
 import Reply from '../../images/icon-reply.svg'
+import DeleteImage from '../../images/icon-delete.svg'
+import EditImage from '../../images/icon-edit.svg'
 
-function Footer({record, loggedin, index, handleReply}) {
+function Footer({record, loggedin, index, handleReply, handleEdit}) {
 
     let theComments = localStorage.getItem('allComments')
     theComments = JSON.parse(theComments)
@@ -47,14 +49,37 @@ function Footer({record, loggedin, index, handleReply}) {
                     </button>
                 </div>
             </div>
-            <div id="replyContainer" onClick={handleReply} className='flex items-center'>
-                <div id="replyIcon" className='mr-2'>
-                    <img src={Reply} alt="Reply" />
-                </div>
-                <div id="replyCopy" className='text-moderateBlue text-base font-medium leading-6'>
-                    <p>Reply</p>
-                </div>
-            </div>
+            {
+                record.user.username === 'juliusomo' ? (
+                    <div id="editDeleteContainer" className='flex'>
+                        <div id="deleteMineContainer" className='flex mr-4 items-center'>
+                            <div id="deleteMineIcon" className='mr-2'>
+                                <img src={DeleteImage} alt="Delete" />
+                            </div>
+                            <div id="deleteMineCopy" className='text-softRed text-base font-medium leading-6'>
+                                <p>Delete</p>
+                            </div>
+                        </div>
+                        <div id="editContainer" onClick={handleEdit} className='flex items-center'>
+                            <div id="editIcon" className='mr-2'>
+                                <img src={EditImage} alt="Edit" />
+                            </div>
+                            <div id="editCopy" className='text-moderateBlue text-base font-medium leading-6'>
+                                <p>Edit</p>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div id="replyContainer" onClick={handleReply} className='flex items-center'>
+                        <div id="replyIcon" className='mr-2'>
+                            <img src={Reply} alt="Reply" />
+                        </div>
+                        <div id="replyCopy" className='text-moderateBlue text-base font-medium leading-6'>
+                            <p>Reply</p>
+                        </div>
+                    </div>
+                )
+            }
         </div>
     </>
   )

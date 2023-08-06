@@ -7,8 +7,8 @@ import Add from './Add'
 
 // fix css
 
-function Comment({allComments, loggedIn, handleReply, onSubmit}) {
-
+function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit}) {
+console.log(`from comment.jsx ${loggedIn}`)
   return (
     <>
         <div id="commentContainer">
@@ -21,19 +21,19 @@ function Comment({allComments, loggedIn, handleReply, onSubmit}) {
                             
                         <div id={record.id} className='bg-white mb-4 p-4 rounded-lg'>
                             <div id="headerWrapper">
-                                <Header record={record} />
+                                <Header record={record} loggedIn={loggedIn} />
                             </div>
                             <div id="commentBodyWrapper" className='mb-4'>
                                 <Body record={record} />
                             </div>
                             <div id="commentFooterWrapper">
-                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} />
+                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} handleEdit={handleEdit} />
                             </div>
                             <div id="replyCommentWrapper" className='hidden'>
                                 <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
                             </div>
                             <div id='replyWrapper'>
-                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} />
+                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} handleEdit={handleEdit} />
                             </div>
                         </div>    
                         ) : (
@@ -45,7 +45,7 @@ function Comment({allComments, loggedIn, handleReply, onSubmit}) {
                                 <Body record={record} />
                             </div>
                             <div id="commentFooterWrapper">
-                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} />
+                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} handleEdit={handleEdit} />
                             </div>
                             <div id="replyCommentWrapper" className='hidden'>
                                 <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
