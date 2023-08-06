@@ -7,7 +7,7 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // bug 1: cant update more than one +/- at a time
-
+  // bug 2: you logic not showing up at times
 
   // reply button click logic
     // reply of subcomment
