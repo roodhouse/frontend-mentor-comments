@@ -17,7 +17,7 @@ function Header({record, loggedIn}) {
                         <p>you</p>
                     </div>
                 ) : (
-                    "aa"
+                    ""
                 )
              }
             <div id="commentTime" className='text-grayishBlue text-base font-normal leading-6'>
