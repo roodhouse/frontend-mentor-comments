@@ -10,8 +10,7 @@ import Delete from './components/Delete';
   // bug 3: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
   // bug 4: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
 
-  
-  // edit button click logic
+  // edit button on main comments
   // send button logic
   // cancel button logic
   // confirm button logic
@@ -21,8 +20,6 @@ function App() {
 
   const [storage, setStorage] = useState(null)
   const [loggedIn, setLoggedIn] = useState('joe')
-  const [editContainer, setEditContainer] = useState(null)
-  const editContainerRef = useRef(null);
 
   useEffect(() => {
     if (localStorage.getItem('allComments') === null ) {
@@ -90,7 +87,6 @@ function App() {
     let replyBox = e.target.parentElement.parentElement.parentElement.parentElement.nextSibling;
     let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.id);
     let parentIndex = storage.comments.findIndex(item => item.id === parentComment);
-    console.log(parentIndex)
     
     if (parentIndex !== -1) { // Make sure the parent comment is found
       
@@ -146,8 +142,6 @@ function App() {
       let grandparentIndex = storage.comments.findIndex(item => item.id === grandparentComment);
       
       parentIndex = storage.comments[grandparentIndex].replies.findIndex(item => item.id === parentComment)
-
-      console.log(parentIndex)
       
         if (parentIndex !== -1) {
           let replyingTo = storage.comments[grandparentIndex].replies[parentIndex].user.username
@@ -160,11 +154,8 @@ function App() {
       
           replyButton.addEventListener('click', (f) => {
             f.preventDefault();
-            console.log('click')
-      
+    
             let theContent = f.target.parentElement.parentElement.parentElement.firstChild.firstChild.value;
-
-            console.log(theContent)
       
             let newPng = storage.currentUser.image.png;
             let newWebp = storage.currentUser.image.webp;
@@ -185,20 +176,14 @@ function App() {
                 username: newUsername
               }
             };
-
-            console.log(newResponse)
       
             const updatedComments = [...storage.comments];
-            console.log(updatedComments)
             updatedComments[grandparentIndex].replies[parentIndex].replies.push(newResponse);
-            console.log(updatedComments)
       
             const updatedStorage = {
               ...storage,
               comments: updatedComments
             };
-
-            console.log(updatedStorage)
       
             localStorage.setItem('allComments', JSON.stringify(updatedStorage));
             setStorage(updatedStorage);
@@ -215,6 +200,11 @@ function App() {
 
   // edit button click logic
   function handleEdit(e) {
+    let commentId = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+    let parentId = commentId.parentElement.parentElement.parentElement
+    commentId = parseInt(commentId.id)
+    parentId = parseInt(parentId.id)
+    
     if (e.target.id !== 'editContainer') {
       e.target = e.target.parentElement.parentElement
       let removeText = e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild.firstChild
@@ -223,6 +213,7 @@ function App() {
       currentText = removeText.innerHTML + currentText.innerHTML
       e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild.classList.add('hidden')
       let bodyContainer = e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild
+      console.log(bodyContainer)
       
       let editCommentWrapper = document.createElement('div')
       editCommentWrapper.setAttribute('id', 'editCommentWrapper')
@@ -266,6 +257,44 @@ function App() {
       form.appendChild(editSubmitContainer)
       editSubmitContainer.appendChild(updateButton)
 
+      updateButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        let parentIndex = storage.comments.findIndex(item => item.id === parentId);
+        let parentComment = storage.comments[parentIndex]
+        let commentIndex = parentComment.replies.findIndex(item => item.id === commentId)
+        let currentComment = parentComment.replies[commentIndex]
+        currentText = editComment.value
+
+        let updatedComment = {
+          "content" : currentText,
+          "createdAt" : 'today',
+          "id": currentComment.id,
+          "replies": currentComment.replies,
+          "replyingTo": currentComment.replyingTo,
+          "score": currentComment.score,
+          "user": {
+            "image": {
+              "png": currentComment.user.image.png,
+              "webp": currentComment.user.image.webp
+            },
+            "username": currentComment.user.username
+          }
+        }
+
+        const updatedComments = [...storage.comments];
+            updatedComments[parentIndex].replies[commentIndex] = updatedComment
+      
+            const updatedStorage = {
+              ...storage,
+              comments: updatedComments
+            };
+
+            localStorage.setItem('allComments', JSON.stringify(updatedStorage));
+            setStorage(updatedStorage);
+            // show updated comment
+            e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove('hidden')
+            bodyContainer.removeChild(editCommentWrapper)
+      })
 
     }
 
