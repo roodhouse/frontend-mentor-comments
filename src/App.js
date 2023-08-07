@@ -7,11 +7,13 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // bug 1: cant update more than one +/- at a time
-  // bug 3: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
-  // bug 4: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
+  // bug 2: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
+  // bug 3: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
+  // bug 4: a 3rd level comment is not able to be edited
 
-  // edit button on main comments
+  // delete button logic
   // send button logic
+    // do not allow a post if the field is empty
   // cancel button logic
   // confirm button logic
 
@@ -207,115 +209,148 @@ function App() {
       e.target = e.target.parentElement.parentElement
       let removeText = e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild.firstChild
       let currentText = e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild
+      let savedText = currentText.innerHTML
       currentText.removeChild(removeText)
       currentText = removeText.innerHTML + currentText.innerHTML
-      e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild.classList.add('hidden')
-      let bodyContainer = e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild
-      
-      let editCommentWrapper = document.createElement('div')
-      editCommentWrapper.setAttribute('id', 'editCommentWrapper')
 
-      let editCommentContainer = document.createElement('div')
-      editCommentContainer.setAttribute('id', 'editCommentContainer')
-      editCommentContainer.classList.add('bg-white', 'rounded-lg', 'p-4')
+      if(currentText === 'undefined') {
+        currentText = savedText
+        runEditComment(e)
+      } else {
+        runEditComment(e)
+      }
 
-      let formContainer = document.createElement('div')
-      formContainer.setAttribute('id', 'formContainer')
-
-      let form = document.createElement('form')
-      form.setAttribute('novalidate', true)
-      form.classList.add('flex', 'flex-col')
-
-      let editTextContainer = document.createElement('div')
-      editTextContainer.setAttribute('id', 'editTextContainer')
-      editTextContainer.classList.add('mb-4', 'rounded-lg', 'border', 'border-lightGray', 'pt-3', 'pl-6')
-
-      let editComment = document.createElement('textarea')
-      editComment.setAttribute('name', 'editComment')
-      editComment.setAttribute('id', 'editComment')
-      editComment.setAttribute('cols', 30)
-      editComment.setAttribute('rows', 3)
-      editComment.innerHTML = currentText
-
-      let editSubmitContainer = document.createElement('div')
-      editSubmitContainer.setAttribute('id', 'editSubmitContainer')
-      editSubmitContainer.classList.add('bg-moderateBlue', 'text-white', 'rounded-lg', 'py-3', 'px-[30px]', 'w-[102px]', 'flex', 'justify-center', 'self-end')
-
-      let updateButton = document.createElement('button')
-      updateButton.setAttribute('type', 'submit')
-      updateButton.innerHTML = "UPDATE"
-
-      bodyContainer.appendChild(editCommentWrapper)
-      editCommentWrapper.appendChild(editCommentContainer)
-      editCommentContainer.appendChild(formContainer)
-      formContainer.appendChild(form)
-      form.appendChild(editTextContainer)
-      editTextContainer.appendChild(editComment)
-      form.appendChild(editSubmitContainer)
-      editSubmitContainer.appendChild(updateButton)
-
-      updateButton.addEventListener('click', (e) => {
-        e.preventDefault()
-        
-        let parentIndex = storage.comments.findIndex(item => item.id === parentId);
-        console.log(parentIndex)
-        if (parentIndex !== -1) {
-            let parentComment = storage.comments[parentIndex]
+      function runEditComment(e) {
+        e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild.classList.add('hidden')
+        let bodyContainer = e.target.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild
+          
+          let editCommentWrapper = document.createElement('div')
+          editCommentWrapper.setAttribute('id', 'editCommentWrapper')
+    
+          let editCommentContainer = document.createElement('div')
+          editCommentContainer.setAttribute('id', 'editCommentContainer')
+          editCommentContainer.classList.add('bg-white', 'rounded-lg', 'p-4')
+    
+          let formContainer = document.createElement('div')
+          formContainer.setAttribute('id', 'formContainer')
+    
+          let form = document.createElement('form')
+          form.setAttribute('novalidate', true)
+          form.classList.add('flex', 'flex-col')
+    
+          let editTextContainer = document.createElement('div')
+          editTextContainer.setAttribute('id', 'editTextContainer')
+          editTextContainer.classList.add('mb-4', 'rounded-lg', 'border', 'border-lightGray', 'pt-3', 'pl-6')
+    
+          let editComment = document.createElement('textarea')
+          editComment.setAttribute('name', 'editComment')
+          editComment.setAttribute('id', 'editComment')
+          editComment.setAttribute('cols', 30)
+          editComment.setAttribute('rows', 3)
+          editComment.innerHTML = currentText
+    
+          let editSubmitContainer = document.createElement('div')
+          editSubmitContainer.setAttribute('id', 'editSubmitContainer')
+          editSubmitContainer.classList.add('bg-moderateBlue', 'text-white', 'rounded-lg', 'py-3', 'px-[30px]', 'w-[102px]', 'flex', 'justify-center', 'self-end')
+    
+          let updateButton = document.createElement('button')
+          updateButton.setAttribute('type', 'submit')
+          updateButton.innerHTML = "UPDATE"
+    
+          bodyContainer.appendChild(editCommentWrapper)
+          editCommentWrapper.appendChild(editCommentContainer)
+          editCommentContainer.appendChild(formContainer)
+          formContainer.appendChild(form)
+          form.appendChild(editTextContainer)
+          editTextContainer.appendChild(editComment)
+          form.appendChild(editSubmitContainer)
+          editSubmitContainer.appendChild(updateButton)
+    
+          updateButton.addEventListener('click', (e) => {
+            e.preventDefault()
             
-            if (parentComment.replies) {
+            let parentIndex = storage.comments.findIndex(item => item.id === parentId);
+            if (parentIndex !== -1) {
+                let parentComment = storage.comments[parentIndex]
+                
+                if (parentComment.replies) {
+                  
+                    let commentIndex = parentComment.replies.findIndex(item => item.id === commentId)
+                    let currentComment = parentComment.replies[commentIndex]
+                    currentText = editComment.value
+            
+                    let updatedComment = {
+                      "content" : currentText,
+                      "createdAt" : 'today',
+                      "id": currentComment.id,
+                      "replies": currentComment.replies,
+                      "replyingTo": currentComment.replyingTo,
+                      "score": currentComment.score,
+                      "user": {
+                        "image": {
+                          "png": currentComment.user.image.png,
+                          "webp": currentComment.user.image.webp
+                        },
+                        "username": currentComment.user.username
+                      }
+                    }
+            
+                    const updatedComments = [...storage.comments];
+                        updatedComments[parentIndex].replies[commentIndex] = updatedComment
+                  
+                        const updatedStorage = {
+                          ...storage,
+                          comments: updatedComments
+                        };
+            
+                        localStorage.setItem('allComments', JSON.stringify(updatedStorage));
+                        setStorage(updatedStorage);
+                        // show updated comment
+                        e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove('hidden')
+                        bodyContainer.removeChild(editCommentWrapper)
+    
+                } 
+            } else {
+              let currentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
+              let currentText = e.target.parentElement.parentElement.firstChild.firstChild
               
-                let commentIndex = parentComment.replies.findIndex(item => item.id === commentId)
-                let currentComment = parentComment.replies[commentIndex]
-                currentText = editComment.value
-        
-                let updatedComment = {
-                  "content" : currentText,
-                  "createdAt" : 'today',
-                  "id": currentComment.id,
-                  "replies": currentComment.replies,
-                  "replyingTo": currentComment.replyingTo,
-                  "score": currentComment.score,
-                  "user": {
-                    "image": {
-                      "png": currentComment.user.image.png,
-                      "webp": currentComment.user.image.webp
-                    },
-                    "username": currentComment.user.username
-                  }
+              let currentIndex = currentComment - 1
+              currentComment = storage.comments[currentIndex]
+              currentText = editComment.value
+
+              let updatedComment = {
+                "content" : currentText,
+                "createdAt" : 'today',
+                "id": currentComment.id,
+                "replies": currentComment.replies,
+                "replyingTo": currentComment.replyingTo,
+                "score": currentComment.score,
+                "user": {
+                  "image": {
+                    "png": currentComment.user.image.png,
+                    "webp": currentComment.user.image.webp
+                  },
+                  "username": currentComment.user.username
                 }
+              }
+
+                      const updatedComments = [...storage.comments];
+                        updatedComments[currentIndex] = updatedComment
+
+                        const updatedStorage = {
+                          ...storage,
+                          comments: updatedComments
+                        };
+            
+                        localStorage.setItem('allComments', JSON.stringify(updatedStorage));
+                        setStorage(updatedStorage);
+                        // show updated comment
+                        e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove('hidden')
+                        bodyContainer.removeChild(editCommentWrapper)
+            }
+          })
         
-                const updatedComments = [...storage.comments];
-                    updatedComments[parentIndex].replies[commentIndex] = updatedComment
-              
-                    const updatedStorage = {
-                      ...storage,
-                      comments: updatedComments
-                    };
-        
-                    localStorage.setItem('allComments', JSON.stringify(updatedStorage));
-                    setStorage(updatedStorage);
-                    // show updated comment
-                    e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove('hidden')
-                    bodyContainer.removeChild(editCommentWrapper)
-            } 
-        } else {
-          let currentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
-          console.log(currentComment)
-          let currentIndex = currentComment - 1
-          currentIndex = storage.comments[currentIndex]
-          console.log(currentIndex)
-          let currentText = editComment.value
-
-          let updatedComment = {
-            'content': currentIndex
-          }
-
-          // need to fix up this elseblock
-          // need to get the text that is in the textarea and update it
-
-          console.log(updatedComment)
-        }
-      })
+      }
 
     }
 

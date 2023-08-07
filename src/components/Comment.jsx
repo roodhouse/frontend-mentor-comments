@@ -8,7 +8,6 @@ import Add from './Add'
 // fix css
 
 function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit}) {
-console.log(`from comment.jsx ${loggedIn}`)
   return (
     <>
         <div id="commentContainer">
