@@ -459,30 +459,58 @@ function App() {
 
     let confirmButton = document.getElementById('yesButton')
     confirmButton.addEventListener('click', () => {
-
+      console.log('here')
       let deleteIndex = storage.comments.findIndex(
         (item) => item.id === deleteId
       );
-          
-      let updatedComments = storage.comments.filter(function (item, index) {
-        return index !== deleteIndex
-      })
 
-      let updatedStorage = {
-        ...storage,
-        comments: updatedComments,
-      };
+      if (deleteIndex === -1) {
+        console.log('sub comment')
+        console.log(deleteId)
+        let parentId = parseInt(deleteComment.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
+        let parentIndex = parentId - 1
+        console.log(parentIndex)
+        deleteIndex = storage.comments.findIndex( (item) => item.id === parentId)
 
-      localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-          setStorage(updatedStorage);
+        let updatedComments = storage.comments[parentIndex].replies.filter(function (item, index){
+          console.log(index)
+          console.log(deleteIndex)
+          return index !== deleteIndex
+        })
 
-          // revert the disable scroll function above
-      function enableScroll() {
-        window.onscroll = function () {};
+        // two levels deep, so i need to update the replies array and then update the comments array with the new replies array..?
+        console.log(updatedComments)
+
+        let updatedStorage = {
+          ...storage,
+          comments: updatedComments,
+        };
+
+        localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage);
+
+      } else {
+          let updatedComments = storage.comments.filter(function (item, index) {
+            return index !== deleteIndex
+          })
+    
+          let updatedStorage = {
+            ...storage,
+            comments: updatedComments,
+          };
+    
+          localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage);
+    
+              // revert the disable scroll function above
+          function enableScroll() {
+            window.onscroll = function () {};
+          }
+          enableScroll();
+              deleteWrapper = document.getElementById("deleteWrapper");
+              deleteWrapper.classList.add("hidden");
       }
-      enableScroll();
-          deleteWrapper = document.getElementById("deleteWrapper");
-          deleteWrapper.classList.add("hidden");
+          
     })
   }
 
