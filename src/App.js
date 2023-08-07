@@ -426,14 +426,13 @@ function App() {
 
   // delete button logic
   function handleDelete(e) {
-    console.log(e.target);
+    let deleteId = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
     let deleteComment = e.target;
     let deleteWrapper = document.getElementById("deleteWrapper");
     deleteWrapper.classList.remove("hidden");
     deleteWrapper = deleteWrapper.firstChild.firstChild;
     document.getElementById("mainWrapper").scrollIntoView();
 
-    console.log(deleteWrapper);
     function disableScroll() {
       // Get the current page scroll position
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -457,6 +456,34 @@ function App() {
       deleteWrapper.classList.add("hidden");
       deleteComment.scrollIntoView();
     });
+
+    let confirmButton = document.getElementById('yesButton')
+    confirmButton.addEventListener('click', () => {
+
+      let deleteIndex = storage.comments.findIndex(
+        (item) => item.id === deleteId
+      );
+          
+      let updatedComments = storage.comments.filter(function (item, index) {
+        return index !== deleteIndex
+      })
+
+      let updatedStorage = {
+        ...storage,
+        comments: updatedComments,
+      };
+
+      localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+          setStorage(updatedStorage);
+
+          // revert the disable scroll function above
+      function enableScroll() {
+        window.onscroll = function () {};
+      }
+      enableScroll();
+          deleteWrapper = document.getElementById("deleteWrapper");
+          deleteWrapper.classList.add("hidden");
+    })
   }
 
   return (
