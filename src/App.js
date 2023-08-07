@@ -10,14 +10,10 @@ import Delete from './components/Delete';
   // bug 2: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
   // bug 3: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
   // bug 4: a 3rd level comment is not able to be edited
+  // bug 5: a 3rd level comment is not able to be deleted
 
-  // delete button logic
-    // reply
-    // main comment
   // send button logic
     // do not allow a post if the field is empty
-  // cancel button logic
-  // confirm button logic
 
 
 function App() {
@@ -426,70 +422,48 @@ function App() {
 
   // delete button logic
   function handleDelete(e) {
-    let deleteId = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
-    let deleteComment = e.target;
-    let deleteWrapper = document.getElementById("deleteWrapper");
-    deleteWrapper.classList.remove("hidden");
-    deleteWrapper = deleteWrapper.firstChild.firstChild;
-    document.getElementById("mainWrapper").scrollIntoView();
+    
+    let deleteId = e.target.closest('.reply')
+    
+    if (deleteId === null) {
+      deleteId = e.target.closest('.mainComment')
+      deleteId = parseInt(deleteId.id)
+      let deleteIndex = deleteId - 1
+      let deleteComment = e.target;
+      let deleteWrapper = document.getElementById("deleteWrapper");
+      deleteWrapper.classList.remove("hidden");
+      deleteWrapper = deleteWrapper.firstChild.firstChild;
+      document.getElementById("mainWrapper").scrollIntoView();
 
-    function disableScroll() {
-      // Get the current page scroll position
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      let scrollLeft =
-        window.pageXOffset || document.documentElement.scrollLeft;
-      // if any scroll is attempted, set this to the previous value
-      window.onscroll = function () {
-        window.scrollTo(scrollLeft, scrollTop);
-      };
-    }
-    disableScroll();
+        function disableScroll() {
+          // Get the current page scroll position
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          let scrollLeft =
+            window.pageXOffset || document.documentElement.scrollLeft;
+          // if any scroll is attempted, set this to the previous value
+          window.onscroll = function () {
+            window.scrollTo(scrollLeft, scrollTop);
+          };
+        }
+        disableScroll();
 
-    let cancelButton = document.getElementById("noButton");
-    cancelButton.addEventListener("click", () => {
-      // revert the disable scroll function above
-      function enableScroll() {
-        window.onscroll = function () {};
-      }
-      enableScroll();
-      deleteWrapper = document.getElementById("deleteWrapper");
-      deleteWrapper.classList.add("hidden");
-      deleteComment.scrollIntoView();
-    });
+        let cancelButton = document.getElementById("noButton");
+        cancelButton.addEventListener("click", () => {
+          // revert the disable scroll function above
+          function enableScroll() {
+            window.onscroll = function () {};
+          }
+          enableScroll();
+          deleteWrapper = document.getElementById("deleteWrapper");
+          deleteWrapper.classList.add("hidden");
+          deleteComment.scrollIntoView();
+        });
 
-    let confirmButton = document.getElementById('yesButton')
-    confirmButton.addEventListener('click', () => {
-      console.log('here')
-      let deleteIndex = storage.comments.findIndex(
-        (item) => item.id === deleteId
-      );
-
-      if (deleteIndex === -1) {
-        console.log('sub comment')
-        console.log(deleteId)
-        let parentId = parseInt(deleteComment.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
-        let parentIndex = parentId - 1
-        console.log(parentIndex)
-        deleteIndex = storage.comments.findIndex( (item) => item.id === parentId)
-
-        let updatedComments = storage.comments[parentIndex].replies.filter(function (item, index){
-          console.log(index)
-          console.log(deleteIndex)
-          return index !== deleteIndex
-        })
-
-        // two levels deep, so i need to update the replies array and then update the comments array with the new replies array..?
-        console.log(updatedComments)
-
-        let updatedStorage = {
-          ...storage,
-          comments: updatedComments,
-        };
-
-        localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-              setStorage(updatedStorage);
-
-      } else {
+        let confirmButton = document.getElementById('yesButton')
+        confirmButton.addEventListener('click', () => {
+          let deleteIndex = storage.comments.findIndex(
+            (item) => item.id === deleteId
+          );
           let updatedComments = storage.comments.filter(function (item, index) {
             return index !== deleteIndex
           })
@@ -509,9 +483,104 @@ function App() {
           enableScroll();
               deleteWrapper = document.getElementById("deleteWrapper");
               deleteWrapper.classList.add("hidden");
-      }
-          
-    })
+        })
+
+    } else {
+        deleteId = parseInt(deleteId.id)
+        let deleteComment = e.target;
+        let deleteWrapper = document.getElementById("deleteWrapper");
+        deleteWrapper.classList.remove("hidden");
+        deleteWrapper = deleteWrapper.firstChild.firstChild;
+        document.getElementById("mainWrapper").scrollIntoView();
+    
+        function disableScroll() {
+          // Get the current page scroll position
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          let scrollLeft =
+            window.pageXOffset || document.documentElement.scrollLeft;
+          // if any scroll is attempted, set this to the previous value
+          window.onscroll = function () {
+            window.scrollTo(scrollLeft, scrollTop);
+          };
+        }
+        disableScroll();
+    
+        let cancelButton = document.getElementById("noButton");
+        cancelButton.addEventListener("click", () => {
+          // revert the disable scroll function above
+          function enableScroll() {
+            window.onscroll = function () {};
+          }
+          enableScroll();
+          deleteWrapper = document.getElementById("deleteWrapper");
+          deleteWrapper.classList.add("hidden");
+          deleteComment.scrollIntoView();
+        });
+    
+        let confirmButton = document.getElementById('yesButton')
+        confirmButton.addEventListener('click', () => {
+          let deleteIndex = storage.comments.findIndex(
+            (item) => item.id === deleteId
+          );
+    
+          if (deleteIndex === -1) {
+            console.log('sub comment')
+            console.log(deleteId)
+            let parentId = e.target.closest('.mainComment')
+            parentId = parseInt(parentId.id)
+            let parentIndex = parentId - 1
+            console.log(parentIndex)
+            deleteIndex = storage.comments.findIndex( (item) => item.id === parentId)
+    
+            let updatedComments = storage.comments
+    
+            let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index){
+              console.log(index)
+              console.log(deleteIndex)
+              return index !== deleteIndex
+            })
+    
+            updatedComments[parentIndex].replies = newCommentsArray
+    
+            let updatedStorage = {
+              ...storage,
+              comments: updatedComments,
+            };
+                  localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+                  setStorage(updatedStorage);
+    
+                  // revert the disable scroll function above
+              function enableScroll() {
+                window.onscroll = function () {};
+              }
+              enableScroll();
+                  deleteWrapper = document.getElementById("deleteWrapper");
+                  deleteWrapper.classList.add("hidden");
+    
+          } else {
+              let updatedComments = storage.comments.filter(function (item, index) {
+                return index !== deleteIndex
+              })
+        
+              let updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+        
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+                  setStorage(updatedStorage);
+        
+                  // revert the disable scroll function above
+              function enableScroll() {
+                window.onscroll = function () {};
+              }
+              enableScroll();
+                  deleteWrapper = document.getElementById("deleteWrapper");
+                  deleteWrapper.classList.add("hidden");
+          }
+              
+        })
+    }
   }
 
   return (

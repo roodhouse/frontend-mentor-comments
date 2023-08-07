@@ -18,7 +18,7 @@ function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, hand
                         
                         record.replies.length > 0 ? (
                             
-                        <div id={record.id} className='bg-white mb-4 p-4 rounded-lg'>
+                        <div id={record.id} className='mainComment bg-white mb-4 p-4 rounded-lg'>
                             <div id="headerWrapper">
                                 <Header record={record} loggedIn={loggedIn} />
                             </div>
@@ -36,7 +36,7 @@ function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, hand
                             </div>
                         </div>    
                         ) : (
-                        <div id={record.id} className='bg-white mb-4 p-4 rounded-lg'>
+                        <div id={record.id} className='mainComment bg-white mb-4 p-4 rounded-lg'>
                             <div id="headerWrapper">
                                 <Header record={record} />
                             </div>
