@@ -299,11 +299,21 @@ function App() {
                     bodyContainer.removeChild(editCommentWrapper)
             } 
         } else {
-          console.log('go')
+          let currentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
+          console.log(currentComment)
+          let currentIndex = currentComment - 1
+          currentIndex = storage.comments[currentIndex]
+          console.log(currentIndex)
+          let currentText = editComment.value
+
+          let updatedComment = {
+            'content': currentIndex
+          }
 
           // need to fix up this elseblock
+          // need to get the text that is in the textarea and update it
 
-          
+          console.log(updatedComment)
         }
       })
 
