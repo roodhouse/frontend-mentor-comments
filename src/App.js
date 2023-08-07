@@ -12,6 +12,8 @@ import Delete from './components/Delete';
   // bug 4: a 3rd level comment is not able to be edited
 
   // delete button logic
+    // reply
+    // main comment
   // send button logic
     // do not allow a post if the field is empty
   // cancel button logic
@@ -355,6 +357,13 @@ function App() {
     }
 
   }
+
+  // delete button logic
+  function handleDelete(e) {
+    console.log(e.target)
+    // document.getElementById('deleteWrapper').classList.remove('hidden')
+    console.log(e.target.scrollTop)
+  }
   
   
   return (
@@ -363,7 +372,7 @@ function App() {
         <div id='mainContainer' className='bg-veryLightGray py-8'>
           <div id='commentReplyWrapper' className=' px-4'>
             <div id='commentWrapper'>
-              <Comment allComments={storage} loggedIn={loggedIn} handleReply={handleReply} handleEdit={handleEdit} />
+              <Comment allComments={storage} loggedIn={loggedIn} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
             </div>
           </div>
           <div id='addCommentWrapper' className='px-4'>

@@ -7,7 +7,7 @@ import Add from './Add'
 
 // fix css
 
-function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit}) {
+function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, handleDelete}) {
   return (
     <>
         <div id="commentContainer">
@@ -26,13 +26,13 @@ function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit}) {
                                 <Body record={record} />
                             </div>
                             <div id="commentFooterWrapper">
-                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} handleEdit={handleEdit} />
+                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
                             </div>
                             <div id="replyCommentWrapper" className='hidden'>
                                 <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
                             </div>
                             <div id='replyWrapper'>
-                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} handleEdit={handleEdit} />
+                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
                             </div>
                         </div>    
                         ) : (
@@ -44,7 +44,7 @@ function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit}) {
                                 <Body record={record} />
                             </div>
                             <div id="commentFooterWrapper">
-                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} handleEdit={handleEdit} />
+                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
                             </div>
                             <div id="replyCommentWrapper" className='hidden'>
                                 <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />

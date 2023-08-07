@@ -5,7 +5,7 @@ import ReplyFooter from './reply/ReplyFooter'
 import Add from '../Add'
 import CommentReply from './reply/commentReply/CommentReply'
 
-function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, handleEdit}) {
+function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, handleEdit, handleDelete}) {
 
   return (
     <>
@@ -24,7 +24,7 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
                                     <ReplyBody record={reply} />
                                 </div>
                                 <div id="replyFooterWrapper">
-                                    <ReplyFooter record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} handleReply={handleReply} handleEdit={handleEdit} />
+                                    <ReplyFooter record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
                                 </div>
                                 <div id="replyCommentWrapper" className='hidden'>
                                     <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
@@ -45,7 +45,7 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
                                     <ReplyBody record={reply} />
                                 </div>
                                 <div id="replyFooterWrapper">
-                                    <ReplyFooter record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} handleReply={handleReply} handleEdit={handleEdit} />
+                                    <ReplyFooter record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
                                 </div>
                                 <div id="replyCommentWrapper" className='hidden'>
                                     <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
