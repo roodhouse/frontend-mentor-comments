@@ -5,7 +5,7 @@ import Reply from '../../../images/icon-reply.svg'
 import Delete from '../../../images/icon-delete.svg'
 import Edit from '../../../images/icon-edit.svg'
 
-function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEdit}) {
+function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEdit, handleDelete}) {
 
     let theComments = localStorage.getItem('allComments')
     theComments = JSON.parse(theComments)
@@ -73,7 +73,7 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
             {
                 loggedIn === record.user.username ? (
                     <div id="editDeleteContainer" className='flex'>
-                        <div id="deleteMineContainer" className='flex mr-4 items-center'>
+                        <div id="deleteMineContainer" onClick={handleDelete} className='flex mr-4 items-center'>
                             <div id="deleteMineIcon" className='mr-2'>
                                 <img src={Delete} alt="Delete" />
                             </div>
