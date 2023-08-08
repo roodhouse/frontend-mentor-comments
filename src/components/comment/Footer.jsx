@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Plus from '../../images/icon-plus.svg'
 import Minus from '../../images/icon-minus.svg'
 import Reply from '../../images/icon-reply.svg'
@@ -11,25 +11,41 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
     theComments = JSON.parse(theComments)
 
     function handlePlus(e) {
-        // get id of the response
-        let parentComment = theComments.comments[index]
-        parentComment.score = ++parentComment.score
-        localStorage.setItem('allComments', JSON.stringify(theComments))
-        
-        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = parentComment.score
+        const storedComments = localStorage.getItem('allComments')
+        let comments = JSON.parse(storedComments).comments
+        console.log('comments: ', comments)
+        const updatedComments = [...comments]
+        console.log('updatedComments: ',updatedComments)
+        updatedComments[index].score++
+        let newScore = updatedComments[index].score
+        console.log(newScore)
+        const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+        updatedAllComments.comments= updatedComments
+        localStorage.setItem('allComments', JSON.stringify(updatedAllComments));
+        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
+       
     }
 
     function handleMinus(e) {
-        // get id of the response
-        let parentComment = theComments.comments[index]
-        if (parentComment.score === 0) {
+        if (e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML === 0 || e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML === '0' ) {
             return
         } else {
-            parentComment.score = --parentComment.score
-            localStorage.setItem('allComments', JSON.stringify(theComments))
-            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = parentComment.score
+            const storedComments = localStorage.getItem('allComments')
+            let comments = JSON.parse(storedComments).comments
+            console.log('comments: ', comments)
+            const updatedComments = [...comments]
+            console.log('updatedComments: ',updatedComments)
+            updatedComments[index].score--
+            let newScore = updatedComments[index].score
+            console.log(newScore)
+            const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+            updatedAllComments.comments= updatedComments
+            localStorage.setItem('allComments', JSON.stringify(updatedAllComments));
+            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = newScore
         }
     }
+
+
   return (
 
     <>

@@ -11,45 +11,41 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
     theComments = JSON.parse(theComments)
     
     function handlePlus(e) {
-        // get id of the sister comment and then the parent comment
-        let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
+        const storedComments = localStorage.getItem('allComments')
+        let comments = JSON.parse(storedComments).comments[index].replies
+        console.log('comments: ', comments)
+        const updatedComments = [...comments]
+        console.log(updatedComments[replyIndex])
+        updatedComments[replyIndex].score++
+        let newScore = updatedComments[replyIndex].score
         
-        let parentComment = sisterComment.parentElement.parentElement.parentElement
-
-        if(sisterComment.classList.contains('reply')) {
-            
-            sisterComment = sisterComment.id
-            parentComment = parentComment.id
-            
-            parentComment = theComments.comments[index]
-            sisterComment = parentComment.replies[replyIndex]
-
-            sisterComment.score = ++sisterComment.score
-            localStorage.setItem('allComments', JSON.stringify(theComments))
-            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = sisterComment.score   
-        }
+        const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+        updatedAllComments.comments[index].replies = updatedComments
+        localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+        console.log(e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML)
+        console.log(newScore)
+        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
     }
 
     function handleMinus(e) {
-        // get id of the sister comment and then the parent comment
-        let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
-        let parentComment = sisterComment.parentElement.parentElement.parentElement
-
-        if(sisterComment.classList.contains('reply')) {
-            sisterComment = sisterComment.id
-            parentComment = parentComment.id
-
-            parentComment = theComments.comments[index]
-            sisterComment = parentComment.replies[replyIndex]
-
-            if (sisterComment.score === 0){
-                return
-            } else {
-                sisterComment.score = --sisterComment.score
-                localStorage.setItem('allComments', JSON.stringify(theComments))
-                e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = sisterComment.score
-            }
+        if (e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML === 0 || e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML === '0') {
+            return
+        } else {
+            const storedComments = localStorage.getItem('allComments')
+            let comments = JSON.parse(storedComments).comments[index].replies
+            console.log('comments: ', comments)
+            const updatedComments = [...comments]
+            console.log(updatedComments[replyIndex])
+            updatedComments[replyIndex].score--
+            let newScore = updatedComments[replyIndex].score
+            
+            const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+            updatedAllComments.comments[index].replies = updatedComments
+            localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+            console.log(newScore)
+            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = newScore
         }
+
     }
 
   return (
