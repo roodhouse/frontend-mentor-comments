@@ -3,7 +3,7 @@ import ReplyHeader from '../ReplyHeader'
 import ReplyBody from '../ReplyBody'
 import ReplyFooter from '../ReplyFooter'
 
-function CommentReply({record, loggedIn, index, replyIndex, allComments, onSubmit, handleReply}) {
+function CommentReply({record, loggedIn, index, replyIndex, allComments, onSubmit, handleReply, handleDelete, handleEdit}) {
 
   return (
 
@@ -21,7 +21,7 @@ function CommentReply({record, loggedIn, index, replyIndex, allComments, onSubmi
                                     <ReplyBody record={reply} />
                                 </div>
                                 <div id="replyFooterWrapper">
-                                    <ReplyFooter record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} handleReply={handleReply} />
+                                    <ReplyFooter record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete}   />
                                 </div>
                             </div>
                         </>

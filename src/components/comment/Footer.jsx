@@ -76,7 +76,7 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
                                 <p>Delete</p>
                             </div>
                         </div>
-                        <div id="editContainer" onClick={handleEdit} className='flex items-center'>
+                        <div id="editContainer" onClick={handleEdit} className='editComment flex items-center'>
                             <div id="editIcon" className='mr-2'>
                                 <img src={EditImage} alt="Edit" />
                             </div>

@@ -6,8 +6,9 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 4: a 3rd level comment is not able to be edited
-  // bug 5: a 3rd level comment is not able to be deleted
+  // bug 4: edit of 3rd level comment changes the very first comment..
+  // bug 5: unable to delete 3rd level comment
+  // bug 6: 3rd level comments share plus/minus with parent
   // bug 6: mobile css got messed up
 
 
@@ -30,7 +31,12 @@ function App() {
       setStorage(allComments);
       setLoggedIn(loggedIn);
     }
-  }, []);
+
+    
+  
+  },[]);
+
+  
 
   function onSubmit(e) {
     e.preventDefault();

@@ -77,7 +77,7 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
                                 <p>Delete</p>
                             </div>
                         </div>
-                        <div id="editContainer" onClick={handleEdit} className='flex items-center'>
+                        <div id="editContainer" onClick={handleEdit} className='editComment flex items-center'>
                             <div id="editIcon" className='mr-2'>
                                 <img src={Edit} alt="Edit" />
                             </div>
