@@ -6,10 +6,6 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 1: cant update more than one +/- at a time
-    // what happens if i pull the plus/minus function into app.js and then pass as a prop?
-    // look at chat gpt for latest answer...
-  // bug 2: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
   // bug 3: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
   // bug 4: a 3rd level comment is not able to be edited
   // bug 5: a 3rd level comment is not able to be deleted
@@ -42,7 +38,6 @@ function App() {
 
     let theContent = e.target.parentElement.parentElement.previousSibling.firstChild.value;
     if (theContent === '') {
-      console.log('empty')
       return
     } else {
         let newId = storage.comments.slice(-1);
@@ -114,7 +109,6 @@ function App() {
         let theContent =
           f.target.parentElement.parentElement.parentElement.firstChild
             .firstChild.value;
-        console.log(theContent)
         if(theContent === '') {
           return
         } else {
@@ -181,23 +175,24 @@ function App() {
           replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling
             .firstChild.nextSibling.firstChild;
 
-        replyButton.addEventListener("click", (f) => {
-          f.preventDefault();
+        replyButton.addEventListener("click", (g) => {
+          g.preventDefault();
 
           let theContent =
-            f.target.parentElement.parentElement.parentElement.firstChild
+            g.target.parentElement.parentElement.parentElement.firstChild
               .firstChild.value;
 
           let newPng = storage.currentUser.image.png;
           let newWebp = storage.currentUser.image.webp;
           let newUsername = storage.currentUser.username;
 
+          const parentComment = storage.comments[grandparentIndex].replies[parentIndex];
+          const maxId = parentComment.replies.reduce((max, reply) => Math.max(max, reply.id), 0);
+
           const newResponse = {
             content: theContent,
             createdAt: "today",
-            id:
-              storage.comments[grandparentIndex].replies[parentIndex].replies
-                .length + 1, // You can generate new ID as needed
+            id: maxId + 1, // You can generate new ID as needed
             replyingTo: replyingTo,
             replies: [],
             score: 0,
@@ -210,24 +205,29 @@ function App() {
             },
           };
 
-          const updatedComments = [...storage.comments];
-          updatedComments[grandparentIndex].replies[parentIndex].replies.push(
-            newResponse
-          );
+          if (newResponse.content === '') {
+            return
+          } else {
+            const updatedComments = [...storage.comments];
+            updatedComments[grandparentIndex].replies[parentIndex].replies.push(
+              newResponse
+            );
+  
+            const updatedStorage = {
+              ...storage,
+              comments: updatedComments,
+            };
+  
+            localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+            setStorage(updatedStorage);
+  
+            replyBox.classList.add("hidden");
+            theContent =
+              replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
+            theContent.innerHTML = "";
+            theContent.value = "";
+          }
 
-          const updatedStorage = {
-            ...storage,
-            comments: updatedComments,
-          };
-
-          localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-          setStorage(updatedStorage);
-
-          replyBox.classList.add("hidden");
-          theContent =
-            replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
-          theContent.innerHTML = "";
-          theContent.value = "";
         });
       }
     }
@@ -533,19 +533,16 @@ function App() {
           );
     
           if (deleteIndex === -1) {
-            console.log('sub comment')
-            console.log(deleteId)
+            
             let parentId = e.target.closest('.mainComment')
             parentId = parseInt(parentId.id)
             let parentIndex = parentId - 1
-            console.log(parentIndex)
             deleteIndex = storage.comments.findIndex( (item) => item.id === parentId)
     
             let updatedComments = storage.comments
     
             let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index){
-              console.log(index)
-              console.log(deleteIndex)
+              
               return index !== deleteIndex
             })
     
