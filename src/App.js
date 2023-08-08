@@ -12,9 +12,6 @@ import Delete from './components/Delete';
   // bug 4: a 3rd level comment is not able to be edited
   // bug 5: a 3rd level comment is not able to be deleted
 
-  // send button logic
-    // do not allow a post if the field is empty
-
 
 function App() {
   const [storage, setStorage] = useState(null);
@@ -40,43 +37,48 @@ function App() {
   function onSubmit(e) {
     e.preventDefault();
 
-    let theContent =
-      e.target.parentElement.parentElement.previousSibling.firstChild.value;
-    let newId = storage.comments.slice(-1);
-    newId = newId[0].id;
-    newId = ++newId;
+    let theContent = e.target.parentElement.parentElement.previousSibling.firstChild.value;
+    if (theContent === '') {
+      console.log('empty')
+      return
+    } else {
+        let newId = storage.comments.slice(-1);
+        newId = newId[0].id;
+        newId = ++newId;
+    
+        let newPng = storage.currentUser.image.png;
+        let newWebp = storage.currentUser.image.webp;
+        let newUsername = storage.currentUser.username;
+    
+        const newResponse = {
+          content: theContent,
+          createdAt: "today",
+          id: newId,
+          replies: [],
+          score: 0,
+          user: {
+            image: {
+              png: newPng,
+              webp: newWebp,
+            },
+            username: newUsername,
+          },
+        };
+    
+        const updatedStorage = {
+          ...storage,
+          comments: [...storage.comments, newResponse],
+        };
+    
+        localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+        setStorage(updatedStorage);
+    
+        theContent =
+          e.target.parentElement.parentElement.previousSibling.firstChild;
+        theContent.innerHTML = "";
+        theContent.value = "";
 
-    let newPng = storage.currentUser.image.png;
-    let newWebp = storage.currentUser.image.webp;
-    let newUsername = storage.currentUser.username;
-
-    const newResponse = {
-      content: theContent,
-      createdAt: "today",
-      id: newId,
-      replies: [],
-      score: 0,
-      user: {
-        image: {
-          png: newPng,
-          webp: newWebp,
-        },
-        username: newUsername,
-      },
-    };
-
-    const updatedStorage = {
-      ...storage,
-      comments: [...storage.comments, newResponse],
-    };
-
-    localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-    setStorage(updatedStorage);
-
-    theContent =
-      e.target.parentElement.parentElement.previousSibling.firstChild;
-    theContent.innerHTML = "";
-    theContent.value = "";
+    }
   }
 
   function handleReply(e) {
@@ -109,43 +111,47 @@ function App() {
         let theContent =
           f.target.parentElement.parentElement.parentElement.firstChild
             .firstChild.value;
-
-        let newPng = storage.currentUser.image.png;
-        let newWebp = storage.currentUser.image.webp;
-        let newUsername = storage.currentUser.username;
-
-        const newResponse = {
-          content: theContent,
-          createdAt: "today",
-          id: storage.comments.length + 1, // You can generate new ID as needed
-          replyingTo: replyingTo,
-          replies: [],
-          score: 0,
-          user: {
-            image: {
-              png: newPng,
-              webp: newWebp,
-            },
-            username: newUsername,
-          },
-        };
-
-        const updatedComments = [...storage.comments];
-        updatedComments[parentIndex].replies.push(newResponse);
-
-        const updatedStorage = {
-          ...storage,
-          comments: updatedComments,
-        };
-
-        localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-        setStorage(updatedStorage);
-
-        replyBox.classList.add("hidden");
-        theContent =
-          replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
-        theContent.innerHTML = "";
-        theContent.value = "";
+        console.log(theContent)
+        if(theContent === '') {
+          return
+        } else {
+            let newPng = storage.currentUser.image.png;
+            let newWebp = storage.currentUser.image.webp;
+            let newUsername = storage.currentUser.username;
+    
+            const newResponse = {
+              content: theContent,
+              createdAt: "today",
+              id: storage.comments.length + 1, // You can generate new ID as needed
+              replyingTo: replyingTo,
+              replies: [],
+              score: 0,
+              user: {
+                image: {
+                  png: newPng,
+                  webp: newWebp,
+                },
+                username: newUsername,
+              },
+            };
+    
+            const updatedComments = [...storage.comments];
+            updatedComments[parentIndex].replies.push(newResponse);
+    
+            const updatedStorage = {
+              ...storage,
+              comments: updatedComments,
+            };
+    
+            localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+            setStorage(updatedStorage);
+    
+            replyBox.classList.add("hidden");
+            theContent =
+              replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
+            theContent.innerHTML = "";
+            theContent.value = "";
+        }
       });
     } else if (parentIndex === -1) {
       let grandparentComment = parseInt(
