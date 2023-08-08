@@ -7,10 +7,13 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // bug 1: cant update more than one +/- at a time
+    // what happens if i pull the plus/minus function into app.js and then pass as a prop?
+    // look at chat gpt for latest answer...
   // bug 2: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
   // bug 3: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
   // bug 4: a 3rd level comment is not able to be edited
   // bug 5: a 3rd level comment is not able to be deleted
+  // bug 6: mobile css got messed up
 
 
 function App() {
