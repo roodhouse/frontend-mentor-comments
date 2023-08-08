@@ -6,7 +6,6 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 3: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
   // bug 4: a 3rd level comment is not able to be edited
   // bug 5: a 3rd level comment is not able to be deleted
   // bug 6: mobile css got messed up
@@ -42,7 +41,7 @@ function App() {
     } else {
         let newId = storage.comments.slice(-1);
         newId = newId[0].id;
-        newId = ++newId;
+        newId = ++newId+'.'+ newId;
     
         let newPng = storage.currentUser.image.png;
         let newWebp = storage.currentUser.image.webp;
