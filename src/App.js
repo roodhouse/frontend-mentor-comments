@@ -6,9 +6,7 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 5: unable to delete 3rd level comment
-   // delete of 3rd level comment deletes another item entirely
-      // might redo delete logic altogther as it can break easily
+  // bug 5: 2nd click of reply before refresh does not contain the @user and when submitting the comment comes back with the @user and undefined
   // bug 6: 3rd level comments share plus/minus with parent
   // bug 6: mobile css got messed up
 
@@ -534,7 +532,6 @@ function App() {
     if (deleteId === null) {
       deleteId = e.target.closest('.mainComment')
       deleteId = parseInt(deleteId.id)
-      let deleteIndex = deleteId - 1
       let deleteComment = e.target;
       let deleteWrapper = document.getElementById("deleteWrapper");
       deleteWrapper.classList.remove("hidden");
@@ -630,36 +627,76 @@ function App() {
           );
     
           if (deleteIndex === -1) {
-            let parentId = e.target.closest('.mainComment')
-            
+
+            // comment of a comment
+            let currentId = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+            let parentId = currentId.parentElement.parentElement.parentElement
+            let grandparentId = parentId.parentElement.parentElement.parentElement
+
+            currentId = parseInt(currentId.id)
             parentId = parseInt(parentId.id)
+            grandparentId = parseInt(grandparentId.id)
 
-            let parentIndex = parentId - 1
-            deleteIndex = storage.comments.findIndex( (item) => item.id === parentId)
+            if (isNaN(grandparentId)) {
+              // reply of reply
+              let parentIndex = storage.comments.findIndex((item) => item.id === parentId)
+              let currentIndex = storage.comments[parentIndex].replies.findIndex((item) => item.id === currentId)
 
-            let updatedComments = storage.comments
-    
-            let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index){
+              let updatedComments = storage.comments
+              let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index) {
+                return index !== currentIndex
+              })
               
-              return index !== deleteIndex
-            })
-    
-            updatedComments[parentIndex].replies = newCommentsArray
-    
-            let updatedStorage = {
-              ...storage,
-              comments: updatedComments,
-            };
-                  localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-                  setStorage(updatedStorage);
-    
-                  // revert the disable scroll function above
+              updatedComments[parentIndex].replies = newCommentsArray
+
+              let updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage)
+
+              // revert the disable scroll function 
               function enableScroll() {
                 window.onscroll = function () {};
               }
-              enableScroll();
-                  deleteWrapper = document.getElementById("deleteWrapper");
-                  deleteWrapper.classList.add("hidden");
+              enableScroll()
+              deleteWrapper = document.getElementById('deleteWrapper')
+              deleteWrapper.classList.add('hidden')
+
+            } else {
+              let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentId)
+          
+              let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentId)
+  
+              let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentId )
+  
+              let updatedComments = storage.comments
+      
+              let newCommentsArray = updatedComments[grandparentIndex].replies[parentIndex].replies.filter(function (item, index){
+                
+                return index !== currentIndex
+              })
+      
+              updatedComments[grandparentIndex].replies[parentIndex].replies = newCommentsArray
+      
+              let updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+                    localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+                    setStorage(updatedStorage);
+      
+                    // revert the disable scroll function above
+                function enableScroll() {
+                  window.onscroll = function () {};
+                }
+                enableScroll();
+                    deleteWrapper = document.getElementById("deleteWrapper");
+                    deleteWrapper.classList.add("hidden");
+            }
+
     
           } else {
               let updatedComments = storage.comments.filter(function (item, index) {

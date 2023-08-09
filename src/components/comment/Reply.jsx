@@ -12,7 +12,6 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
         <div id='replyContainer' className='border-l-[2px] border-l-lightGray pl-4'>
             {
                 record.replies.map((reply, replyIndex) => {
-                    console.log(reply)
                     return(
                         reply.replies.length > 0 ? (
                             <>
