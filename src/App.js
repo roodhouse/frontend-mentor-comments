@@ -6,10 +6,8 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 4: edit of comment and then refresh causes the @name to appear as many times as there are edits
-      // an edit to a comment is removing the span with the @, then on refresh the span comes back so the @ is printed twice
-    // comments are sharing the same id. how to change the id by one each time
   // bug 5: unable to delete 3rd level comment
+   // delete of 3rd level comment deletes another item entirely
       // might redo delete logic altogther as it can break easily
   // bug 6: 3rd level comments share plus/minus with parent
   // bug 6: mobile css got messed up
@@ -111,6 +109,10 @@ function App() {
       replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML =
         "REPLY";
 
+        let replyAt = replyBox.firstChild.firstChild.firstChild.firstChild.firstChild
+        
+        replyAt.innerHTML = '@' + replyingTo + ' '
+
       let replyButton =
         replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling
           .firstChild.nextSibling.firstChild;
@@ -127,7 +129,11 @@ function App() {
             let newPng = storage.currentUser.image.png;
             let newWebp = storage.currentUser.image.webp;
             let newUsername = storage.currentUser.username;
-    
+  
+            theContent = theContent.split(' ')
+
+            theContent = ' ' + theContent[1]
+
             const newResponse = {
               content: theContent,
               createdAt: "today",
@@ -183,9 +189,13 @@ function App() {
           storage.comments[grandparentIndex].replies[parentIndex].user.username;
         replyBox.classList.remove("hidden");
 
+        let replyAt = replyBox.firstChild.firstChild.firstChild.firstChild.firstChild
+        
+        replyAt.innerHTML = '@' + replyingTo + ' '
+
         replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML =
           "REPLY";
-
+          
         let replyButton =
           replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling
             .firstChild.nextSibling.firstChild;
@@ -197,13 +207,16 @@ function App() {
             g.target.parentElement.parentElement.parentElement.firstChild
               .firstChild.value;
 
+              theContent = theContent.split(' ')
+
+              theContent = ' ' + theContent[1]
+
           let newPng = storage.currentUser.image.png;
           let newWebp = storage.currentUser.image.webp;
           let newUsername = storage.currentUser.username;
 
           const parentComment = storage.comments[grandparentIndex].replies[parentIndex];
           const maxId = parentComment.replies.reduce((max, reply) => Math.max(max, reply.id), 0);
-          console.log(parentComment)
 
           const newResponse = {
             content: theContent,
@@ -266,12 +279,13 @@ function App() {
       let removeText =
         e.target.parentElement.parentElement.parentElement.parentElement
           .firstChild.nextSibling.firstChild.firstChild.firstChild;
+      
       let currentText =
         e.target.parentElement.parentElement.parentElement.parentElement
-          .firstChild.nextSibling.firstChild.firstChild;
+          .firstChild.nextSibling.firstChild.firstChild.lastChild;
       let savedText = currentText.innerHTML;
-      currentText.removeChild(removeText);
-      currentText = removeText.innerHTML + currentText.innerHTML;
+      
+      currentText = savedText
 
       if (currentText === "undefined") {
         currentText = savedText;
@@ -318,7 +332,7 @@ function App() {
         editComment.setAttribute("id", "editComment");
         editComment.setAttribute("cols", 30);
         editComment.setAttribute("rows", 3);
-        editComment.innerHTML = currentText;
+        editComment.innerHTML = removeText.innerHTML + ' ' + currentText;
 
         let editSubmitContainer = document.createElement("div");
         editSubmitContainer.setAttribute("id", "editSubmitContainer");
@@ -362,6 +376,10 @@ function App() {
               );
               let currentComment = parentComment.replies[commentIndex];
               currentText = editComment.value;
+
+              let theAt = currentText.split(currentText.substring(0, currentText.indexOf(' ')))
+
+              currentText = theAt[1]
 
               let updatedComment = {
                 content: currentText,
@@ -413,7 +431,6 @@ function App() {
             currentText = editComment.value;
 
             if (currentComment !== undefined) {
-              console.log('here')
               let updatedComment = {
                 content: currentText,
                 createdAt: "today",
@@ -446,7 +463,6 @@ function App() {
               );
               bodyContainer.removeChild(editCommentWrapper);
             } else {
-                console.log('down here')
                 currentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
                 .parentElement.parentElement.parentElement.parentElement.id)
                 
@@ -465,6 +481,10 @@ function App() {
 
                 let current = storage.comments[grandparentIndex].replies[parentIndex].replies[currentIndex]
 
+                let theAt = currentText.split(currentText.substring(0, currentText.indexOf(' ')))
+
+              currentText = theAt[1]
+
                 let updatedComment = {
                   content: currentText,
                   createdAt: 'today',
@@ -480,10 +500,8 @@ function App() {
                     username: current.user.username
                   }
                 }
-
-                console.log(current.replyingTo)
                 
-                const updatedComments = [...storage.comments];
+              const updatedComments = [...storage.comments];
 
               updatedComments[grandparentIndex].replies[parentIndex].replies[currentIndex] = updatedComment
   
@@ -512,7 +530,6 @@ function App() {
   function handleDelete(e) {
     
     let deleteId = e.target.closest('.reply')
-    console.log(deleteId)
     
     if (deleteId === null) {
       deleteId = e.target.closest('.mainComment')
@@ -576,7 +593,6 @@ function App() {
 
     } else {
         deleteId = parseInt(deleteId.id)
-        console.log(deleteId)
         let deleteComment = e.target;
         let deleteWrapper = document.getElementById("deleteWrapper");
         deleteWrapper.classList.remove("hidden");
@@ -614,15 +630,13 @@ function App() {
           );
     
           if (deleteIndex === -1) {
-            console.log('here')
             let parentId = e.target.closest('.mainComment')
             
             parentId = parseInt(parentId.id)
 
-            //// need logic here for sub comments deletion...
             let parentIndex = parentId - 1
             deleteIndex = storage.comments.findIndex( (item) => item.id === parentId)
-            console.log(deleteIndex)
+
             let updatedComments = storage.comments
     
             let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index){
@@ -648,8 +662,6 @@ function App() {
                   deleteWrapper.classList.add("hidden");
     
           } else {
-            console.log('here in the else')
-            console.log(deleteIndex)
               let updatedComments = storage.comments.filter(function (item, index) {
                 return index !== deleteIndex
               })

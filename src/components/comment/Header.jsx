@@ -8,7 +8,7 @@ function Header({record, loggedIn}) {
             <div id="commentAvatar" className='w-8 h-8 mr-4'>
                 <img src={record.user.image.webp} alt="comment avatar" />
             </div>
-            <div id="commentName" className='text-darkBlue text-base font-medium leading-normal mr-4'>
+            <div id="commentName" className='commentName text-darkBlue text-base font-medium leading-normal mr-4'>
                 <p>{record.user.username}</p>
             </div>
             { 
