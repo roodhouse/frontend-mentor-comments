@@ -6,7 +6,7 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 5: 2nd click of reply before refresh does not contain the @user and when submitting the comment comes back with the @user and undefined
+  
   // bug 6: 3rd level comments share plus/minus with parent
   // bug 6: mobile css got messed up
 
@@ -56,7 +56,6 @@ function App() {
         const newResponse = {
           content: theContent,
           createdAt: "today",
-          // id: newId,
           id: newEntryId,
           replies: [],
           score: 0,
@@ -121,7 +120,10 @@ function App() {
         let theContent =
           f.target.parentElement.parentElement.parentElement.firstChild
             .firstChild.value;
-        if(theContent === '') {
+            console.log(theContent)
+        let splitContent = theContent.split(' ')
+        console.log(splitContent)
+        if(!splitContent[1]){
           return
         } else {
             let newPng = storage.currentUser.image.png;
@@ -135,7 +137,6 @@ function App() {
             const newResponse = {
               content: theContent,
               createdAt: "today",
-              // id: storage.comments.length + 1, // You can generate new ID as needed
               id: newEntryId,
               replyingTo: replyingTo,
               replies: [],
@@ -165,8 +166,8 @@ function App() {
             replyBox.classList.add("hidden");
             theContent =
               replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
-            theContent.innerHTML = "";
-            theContent.value = "";
+            theContent.innerHTML = ''
+            theContent.value = '@' + replyingTo + ' ';
         }
       });
     } else if (parentIndex === -1) {
@@ -201,62 +202,67 @@ function App() {
         replyButton.addEventListener("click", (g) => {
           g.preventDefault();
 
+
           let theContent =
             g.target.parentElement.parentElement.parentElement.firstChild
               .firstChild.value;
 
-              theContent = theContent.split(' ')
-
-              theContent = ' ' + theContent[1]
-
-          let newPng = storage.currentUser.image.png;
-          let newWebp = storage.currentUser.image.webp;
-          let newUsername = storage.currentUser.username;
-
-          const parentComment = storage.comments[grandparentIndex].replies[parentIndex];
-          const maxId = parentComment.replies.reduce((max, reply) => Math.max(max, reply.id), 0);
-
-          const newResponse = {
-            content: theContent,
-            createdAt: "today",
-            // id: maxId + 1, // You can generate new ID as needed
-            id: newEntryId,
-            replyingTo: replyingTo,
-            replies: [],
-            score: 0,
-            user: {
-              image: {
-                png: newPng,
-                webp: newWebp,
-              },
-              username: newUsername,
-            },
-          };
-
-          setNewEntryId(newEntryId + 1)
-
-          if (newResponse.content === '') {
-            return
-          } else {
-            const updatedComments = [...storage.comments];
-            updatedComments[grandparentIndex].replies[parentIndex].replies.push(
-              newResponse
-            );
+              let splitContent = theContent.split(' ')
+              console.log(splitContent)
+              if(!splitContent[1]){
+                return
+              } else {
+                theContent = theContent.split(' ')
   
-            const updatedStorage = {
-              ...storage,
-              comments: updatedComments,
+                theContent = ' ' + theContent[1]
+  
+            let newPng = storage.currentUser.image.png;
+            let newWebp = storage.currentUser.image.webp;
+            let newUsername = storage.currentUser.username;
+  
+            const newResponse = {
+              content: theContent,
+              createdAt: "today",
+              id: newEntryId,
+              replyingTo: replyingTo,
+              replies: [],
+              score: 0,
+              user: {
+                image: {
+                  png: newPng,
+                  webp: newWebp,
+                },
+                username: newUsername,
+              },
             };
   
-            localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-            setStorage(updatedStorage);
+            setNewEntryId(newEntryId + 1)
   
-            replyBox.classList.add("hidden");
-            theContent =
-              replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
-            theContent.innerHTML = "";
-            theContent.value = "";
-          }
+  
+            if (newResponse.content === '') {
+              return
+            } else {
+              const updatedComments = [...storage.comments];
+              updatedComments[grandparentIndex].replies[parentIndex].replies.push(
+                newResponse
+              );
+    
+              const updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+    
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage);
+    
+              replyBox.classList.add("hidden");
+              theContent =
+                replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
+              theContent.innerHTML = "";
+              theContent.value = '@' + replyingTo + ' ';
+            }
+                
+              }
 
         });
       }
