@@ -7,7 +7,9 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // bug 4: edit of 3rd level comment changes the very first comment..
+    // comments are sharing the same id. how to change the id by one each time
   // bug 5: unable to delete 3rd level comment
+      // might redo delete logic altogther as it can break easily
   // bug 6: 3rd level comments share plus/minus with parent
   // bug 6: mobile css got messed up
 
@@ -15,6 +17,7 @@ import Delete from './components/Delete';
 function App() {
   const [storage, setStorage] = useState(null);
   const [loggedIn, setLoggedIn] = useState("joe");
+  const [newEntryId, setNewEntryId] = useState(5)
 
   useEffect(() => {
     if (localStorage.getItem("allComments") === null) {
@@ -56,7 +59,8 @@ function App() {
         const newResponse = {
           content: theContent,
           createdAt: "today",
-          id: newId,
+          // id: newId,
+          id: newEntryId,
           replies: [],
           score: 0,
           user: {
@@ -67,6 +71,8 @@ function App() {
             username: newUsername,
           },
         };
+
+        setNewEntryId(newEntryId + 1)
     
         const updatedStorage = {
           ...storage,
@@ -124,7 +130,8 @@ function App() {
             const newResponse = {
               content: theContent,
               createdAt: "today",
-              id: storage.comments.length + 1, // You can generate new ID as needed
+              // id: storage.comments.length + 1, // You can generate new ID as needed
+              id: newEntryId,
               replyingTo: replyingTo,
               replies: [],
               score: 0,
@@ -136,6 +143,8 @@ function App() {
                 username: newUsername,
               },
             };
+
+            setNewEntryId(newEntryId + 1)
     
             const updatedComments = [...storage.comments];
             updatedComments[parentIndex].replies.push(newResponse);
@@ -193,11 +202,13 @@ function App() {
 
           const parentComment = storage.comments[grandparentIndex].replies[parentIndex];
           const maxId = parentComment.replies.reduce((max, reply) => Math.max(max, reply.id), 0);
+          console.log(parentComment)
 
           const newResponse = {
             content: theContent,
             createdAt: "today",
-            id: maxId + 1, // You can generate new ID as needed
+            // id: maxId + 1, // You can generate new ID as needed
+            id: newEntryId,
             replyingTo: replyingTo,
             replies: [],
             score: 0,
@@ -209,6 +220,8 @@ function App() {
               username: newUsername,
             },
           };
+
+          setNewEntryId(newEntryId + 1)
 
           if (newResponse.content === '') {
             return
@@ -394,41 +407,86 @@ function App() {
               e.target.parentElement.parentElement.firstChild.firstChild;
 
             let currentIndex = currentComment - 1;
+            
             currentComment = storage.comments[currentIndex];
             currentText = editComment.value;
 
-            let updatedComment = {
-              content: currentText,
-              createdAt: "today",
-              id: currentComment.id,
-              replies: currentComment.replies,
-              replyingTo: currentComment.replyingTo,
-              score: currentComment.score,
-              user: {
-                image: {
-                  png: currentComment.user.image.png,
-                  webp: currentComment.user.image.webp,
+            if (currentComment !== undefined) {
+              console.log('here')
+              let updatedComment = {
+                content: currentText,
+                createdAt: "today",
+                id: currentComment.id,
+                replies: currentComment.replies,
+                replyingTo: currentComment.replyingTo,
+                score: currentComment.score,
+                user: {
+                  image: {
+                    png: currentComment.user.image.png,
+                    webp: currentComment.user.image.webp,
+                  },
+                  username: currentComment.user.username,
                 },
-                username: currentComment.user.username,
-              },
-            };
+              };
+  
+              const updatedComments = [...storage.comments];
+              updatedComments[currentIndex] = updatedComment;
+  
+              const updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+  
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage);
+              // show updated comment
+              e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove(
+                "hidden"
+              );
+              bodyContainer.removeChild(editCommentWrapper);
+            } else {
+                console.log('down here')
+                currentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
+                .parentElement.parentElement.parentElement.parentElement.id)
+                
+                let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
+                  .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
 
-            const updatedComments = [...storage.comments];
-            updatedComments[currentIndex] = updatedComment;
+                let grandparentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
+                  .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+                  .parentElement.parentElement.id)
 
-            const updatedStorage = {
-              ...storage,
-              comments: updatedComments,
-            };
+                let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentComment);
 
-            localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-            setStorage(updatedStorage);
-            // show updated comment
-            e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove(
-              "hidden"
-            );
-            bodyContainer.removeChild(editCommentWrapper);
-          }
+                let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentComment)
+
+                let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentComment)
+
+                console.log(currentIndex)
+                console.log(parentIndex)
+
+                console.log(grandparentIndex)
+                
+                // stopped here  ---- >
+                let theOG = e.target.parentElement.parentElement.parentElement.parentElement
+                .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+                console.log(theOG)
+
+                let updatedComment = {
+                  content: currentText,
+                  createdAt: 'today',
+                  id: ''
+                }
+
+                console.log(updatedComment)
+
+                
+                // let theComment = storage.comments[grandparentIndex].replies
+                // console.log(theComment)
+
+              }
+            }
+
         });
       }
     }
@@ -438,6 +496,7 @@ function App() {
   function handleDelete(e) {
     
     let deleteId = e.target.closest('.reply')
+    console.log(deleteId)
     
     if (deleteId === null) {
       deleteId = e.target.closest('.mainComment')
@@ -501,6 +560,7 @@ function App() {
 
     } else {
         deleteId = parseInt(deleteId.id)
+        console.log(deleteId)
         let deleteComment = e.target;
         let deleteWrapper = document.getElementById("deleteWrapper");
         deleteWrapper.classList.remove("hidden");
@@ -538,12 +598,15 @@ function App() {
           );
     
           if (deleteIndex === -1) {
-            
+            console.log('here')
             let parentId = e.target.closest('.mainComment')
+            
             parentId = parseInt(parentId.id)
+
+            //// need logic here for sub comments deletion...
             let parentIndex = parentId - 1
             deleteIndex = storage.comments.findIndex( (item) => item.id === parentId)
-    
+            console.log(deleteIndex)
             let updatedComments = storage.comments
     
             let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index){
@@ -569,6 +632,8 @@ function App() {
                   deleteWrapper.classList.add("hidden");
     
           } else {
+            console.log('here in the else')
+            console.log(deleteIndex)
               let updatedComments = storage.comments.filter(function (item, index) {
                 return index !== deleteIndex
               })
