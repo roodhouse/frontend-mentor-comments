@@ -6,7 +6,8 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 4: edit of 3rd level comment changes the very first comment..
+  // bug 4: edit of comment and then refresh causes the @name to appear as many times as there are edits
+      // an edit to a comment is removing the span with the @, then on refresh the span comes back so the @ is printed twice
     // comments are sharing the same id. how to change the id by one each time
   // bug 5: unable to delete 3rd level comment
       // might redo delete logic altogther as it can break easily
@@ -462,27 +463,42 @@ function App() {
 
                 let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentComment)
 
-                console.log(currentIndex)
-                console.log(parentIndex)
-
-                console.log(grandparentIndex)
-                
-                // stopped here  ---- >
-                let theOG = e.target.parentElement.parentElement.parentElement.parentElement
-                .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-                console.log(theOG)
+                let current = storage.comments[grandparentIndex].replies[parentIndex].replies[currentIndex]
 
                 let updatedComment = {
                   content: currentText,
                   createdAt: 'today',
-                  id: ''
+                  id: current.id,
+                  replies: current.replies,
+                  replyingTo: current.replyingTo,
+                  score: current.score,
+                  user: {
+                    image: {
+                      png: current.user.image.png,
+                      webp: current.user.image.webp
+                    },
+                    username: current.user.username
+                  }
                 }
 
-                console.log(updatedComment)
-
+                console.log(current.replyingTo)
                 
-                // let theComment = storage.comments[grandparentIndex].replies
-                // console.log(theComment)
+                const updatedComments = [...storage.comments];
+
+              updatedComments[grandparentIndex].replies[parentIndex].replies[currentIndex] = updatedComment
+  
+              const updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+  
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage);
+              // show updated comment
+              e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove(
+                "hidden"
+              );
+              bodyContainer.removeChild(editCommentWrapper);
 
               }
             }
