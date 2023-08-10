@@ -28,10 +28,10 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
                                 <div id="replyCommentWrapper" className='hidden'>
                                     <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
                                 </div>
+                            </div>
                                 <div id='commentReplyWrapper'>
                                     <CommentReply record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
                                 </div>
-                            </div>
                             </>
 
                         ) : (

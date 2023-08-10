@@ -6,7 +6,13 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 6: mobile css got messed up
+  // css fixed but bugs reintroduced
+  // bug 1: cannot update first level reply
+  // bug 2: cannot delete first level reply
+  // but 3: cannnot update created comment
+  // bug 4: cannnot delete created comment
+  // bug 5: cannot update 3rd level comment
+  // bug 6: cannnot delete 3rd level comment
 
   // full screen view
   // sorting logic from readme
@@ -174,8 +180,11 @@ function App() {
     } else if (parentIndex === -1) {
       let grandparentComment = parseInt(
         e.target.parentElement.parentElement.parentElement.parentElement
-          .parentElement.parentElement.parentElement.parentElement.id
+          .parentElement.parentElement.parentElement.previousSibling.id
       );
+      
+        parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
+          .parentElement.parentElement.parentElement.firstChild.firstChild.id)
       let grandparentIndex = storage.comments.findIndex(
         (item) => item.id === grandparentComment
       );
