@@ -9,7 +9,7 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
 
   return (
     <>
-        <div id='replyContainer' className='border-l-[2px] border-l-lightGray pl-4'>
+        <div id='replyContainer' className='replyContainer border-l-[2px] border-l-lightGray pl-4'>
             {
                 record.replies.map((reply, replyIndex) => {
                     return(
