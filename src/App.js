@@ -308,6 +308,8 @@ function App() {
       let currentIndex = storage.comments.findIndex((item) => item.id === currentId)
       // find current text
       let currentText = currentComment.children[1].firstChild.firstChild.innerHTML
+      // find the current comment info
+      let currentCommentInfo = storage.comments[currentIndex]
       // hide the comment div
       currentComment.children[1].firstChild.firstChild.classList.add('hidden')
       // show the comment box
@@ -374,14 +376,48 @@ function App() {
         editSubmitContainer.appendChild(updateButton);
     
         // add event listener for submit 
+        updateButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        
+        currentText = editComment.value
+
+        let updatedComment = {
+          content: currentText,
+          createdAt: "today",
+          id: currentCommentInfo.id,
+          replies: currentCommentInfo.replies,
+          replyingTo: currentCommentInfo.replyingTo,
+          score: currentCommentInfo.score,
+          user: {
+            image: {
+              png: currentCommentInfo.user.image.png,
+              webp: currentCommentInfo.user.image.webp,
+            },
+            username: currentCommentInfo.user.username,
+          },
+        };
+
+        const updatedComments = [...storage.comments];
+        updatedComments[currentIndex] = updatedComment
+    
+        const updatedStorage = {
+          ...storage,
+          comments: updatedComments,
+        };
+
+        localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+        setStorage(updatedStorage);
+        // show updated comment
+        currentComment.children[1].firstChild.firstChild.classList.remove('hidden')
+        bodyContainer.removeChild(editCommentWrapper);
+        })
       
     } else {
+      
       let parentComment = currentComment.closest('.replyContainer').firstChild
       
       // find grandparent comment 
       let grandparentComment = parentComment.parentElement.parentElement.previousSibling
-      console.log(grandparentComment)
-  
       // find current id
       let currentId = parseInt(currentComment.id)
       // find parent id
@@ -395,9 +431,7 @@ function App() {
       let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentId)
       // find current index
       let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentId)
-      
-      console.log(currentIndex)
-      console.log(e.target)
+
       if (e.target.id !== 'editContainer') {
   
         if (parentComment === null) {
@@ -407,8 +441,6 @@ function App() {
           let theComment = editContainer.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild
           let theAt = theComment.firstChild.innerHTML
           let theCommentText = theComment.firstChild.nextSibling.nextSibling.innerHTML
-    
-          console.log(theAt, theCommentText)
   
         }
   
