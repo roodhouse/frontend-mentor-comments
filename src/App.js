@@ -7,10 +7,10 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // css fixed but bugs reintroduced
-  // bug 1: cannot update first level reply
-  // bug 2: cannot delete first level reply
   // but 3: cannnot update created comment
   // bug 4: cannnot delete created comment
+  // bug 1: cannot update first level reply
+  // bug 2: cannot delete first level reply
   // bug 5: cannot update 3rd level comment
   // bug 6: cannnot delete 3rd level comment
 
@@ -284,9 +284,16 @@ function App() {
     let commentId =
       e.target.parentElement.parentElement.parentElement.parentElement
         .parentElement.parentElement;
+        console.log(commentId)
     let parentId = commentId.parentElement.parentElement.parentElement;
+    console.log(parentId)
     commentId = parseInt(commentId.id);
     parentId = parseInt(parentId.id);
+
+    let mainComment = e.target.closest('.mainComment')
+
+    console.log(mainComment.firstChild.nextSibling.firstChild.firstChild.innerHTML)
+    
 
     if (e.target.id !== "editContainer") {
       e.target = e.target.parentElement.parentElement;
@@ -294,17 +301,21 @@ function App() {
         e.target.parentElement.parentElement.parentElement.parentElement
           .firstChild.nextSibling.firstChild.firstChild.firstChild;
       
-      let currentText =
-        e.target.parentElement.parentElement.parentElement.parentElement
-          .firstChild.nextSibling.firstChild.firstChild.lastChild;
-      let savedText = currentText.innerHTML;
-      
-      currentText = savedText
+      let currentText = mainComment.firstChild.nextSibling.firstChild.firstChild.innerHTML;
 
-      if (currentText === "undefined") {
-        currentText = savedText;
+      console.log(currentText)
+          
+          
+      // let savedText = currentText.innerHTML;
+      
+      // currentText = savedText
+
+
+      if (currentText === undefined) {
+        // currentText = savedText;
         runEditComment(e);
       } else {
+        console.log('in else')
         runEditComment(e);
       }
 
@@ -346,7 +357,15 @@ function App() {
         editComment.setAttribute("id", "editComment");
         editComment.setAttribute("cols", 30);
         editComment.setAttribute("rows", 3);
-        editComment.innerHTML = removeText.innerHTML + ' ' + currentText;
+        
+        console.log(currentText)
+        if (removeText.innerHTML === undefined) {
+        
+          editComment.innerHTML = currentText
+        } else {
+        
+          editComment.innerHTML = removeText.innerHTML + ' ' + currentText;
+        }
 
         let editSubmitContainer = document.createElement("div");
         editSubmitContainer.setAttribute("id", "editSubmitContainer");
@@ -377,6 +396,8 @@ function App() {
 
         updateButton.addEventListener("click", (e) => {
           e.preventDefault();
+
+          console.log('in side')
 
           let parentIndex = storage.comments.findIndex(
             (item) => item.id === parentId
@@ -479,58 +500,73 @@ function App() {
             } else {
                 currentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
                 .parentElement.parentElement.parentElement.parentElement.id)
+
+                console.log(currentComment)
                 
                 let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
                   .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
 
-                let grandparentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
-                  .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-                  .parentElement.parentElement.id)
+                  console.log(parentComment)
 
-                let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentComment);
+                  if(isNaN(parentComment)) {
+                    // new comment update
+                    console.log('new comment update')
+                  } else {
+                    let grandparentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
+                      .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+                      .parentElement.parentElement.id)
+    
+                      console.log(grandparentComment)
+                     
+                    let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentComment);
+    
+    
+    
+                    let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentComment)
+    
+                    let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentComment)
+    
+                    let current = storage.comments[grandparentIndex].replies[parentIndex].replies[currentIndex]
+    
+                    let theAt = currentText.split(currentText.substring(0, currentText.indexOf(' ')))
+    
+                  currentText = theAt[1]
+    
+                    let updatedComment = {
+                      content: currentText,
+                      createdAt: 'today',
+                      id: current.id,
+                      replies: current.replies,
+                      replyingTo: current.replyingTo,
+                      score: current.score,
+                      user: {
+                        image: {
+                          png: current.user.image.png,
+                          webp: current.user.image.webp
+                        },
+                        username: current.user.username
+                      }
+                    }
+                    
+                  const updatedComments = [...storage.comments];
+    
+                  updatedComments[grandparentIndex].replies[parentIndex].replies[currentIndex] = updatedComment
+      
+                  const updatedStorage = {
+                    ...storage,
+                    comments: updatedComments,
+                  };
+      
+                  localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+                  setStorage(updatedStorage);
+                  // show updated comment
+                  e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove(
+                    "hidden"
+                  );
+                  bodyContainer.removeChild(editCommentWrapper);
 
-                let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentComment)
-
-                let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentComment)
-
-                let current = storage.comments[grandparentIndex].replies[parentIndex].replies[currentIndex]
-
-                let theAt = currentText.split(currentText.substring(0, currentText.indexOf(' ')))
-
-              currentText = theAt[1]
-
-                let updatedComment = {
-                  content: currentText,
-                  createdAt: 'today',
-                  id: current.id,
-                  replies: current.replies,
-                  replyingTo: current.replyingTo,
-                  score: current.score,
-                  user: {
-                    image: {
-                      png: current.user.image.png,
-                      webp: current.user.image.webp
-                    },
-                    username: current.user.username
                   }
-                }
-                
-              const updatedComments = [...storage.comments];
 
-              updatedComments[grandparentIndex].replies[parentIndex].replies[currentIndex] = updatedComment
-  
-              const updatedStorage = {
-                ...storage,
-                comments: updatedComments,
-              };
-  
-              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-              setStorage(updatedStorage);
-              // show updated comment
-              e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove(
-                "hidden"
-              );
-              bodyContainer.removeChild(editCommentWrapper);
 
               }
             }
