@@ -12,19 +12,39 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
     
     function handlePlus(e) {
         const storedComments = localStorage.getItem('allComments')
-        let comments = JSON.parse(storedComments).comments[index].replies
-        console.log('comments: ', comments)
-        const updatedComments = [...comments]
-        console.log(updatedComments[replyIndex])
-        updatedComments[replyIndex].score++
-        let newScore = updatedComments[replyIndex].score
+        let allC = JSON.parse(storedComments).comments
+        let theId = allC[index].replies.findIndex((item) => item.id === record.id)
         
-        const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
-        updatedAllComments.comments[index].replies = updatedComments
-        localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
-        console.log(e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML)
-        console.log(newScore)
-        e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
+        if (theId === -1) {
+            // reply of reply, bring in adjusted logic from below
+            
+            let comments = JSON.parse(storedComments).comments[index].replies[replyIndex].replies
+            console.log(comments)
+            let currentIndex = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id
+            currentIndex = parseInt(currentIndex)
+            console.log(currentIndex)
+            let currentComment = comments.findIndex((item) => item.id === currentIndex)
+            console.log(currentComment)
+            // increment from here... 
+        
+        } else {
+            console.log('index: '+index)
+            console.log(replyIndex)
+            
+            let comments = JSON.parse(storedComments).comments[index].replies
+            console.log('comments: ', comments)
+            const updatedComments = [...comments]
+            console.log(updatedComments[replyIndex])
+            updatedComments[replyIndex].score++
+            let newScore = updatedComments[replyIndex].score
+            
+            const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+            updatedAllComments.comments[index].replies = updatedComments
+            localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+            console.log(e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML)
+            console.log(newScore)
+            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
+        }
     }
 
     function handleMinus(e) {
