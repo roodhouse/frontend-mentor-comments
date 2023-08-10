@@ -413,36 +413,56 @@ function App() {
         })
       
     } else {
-      
-      let parentComment = currentComment.closest('.replyContainer').firstChild
-      
+       console.log('reply')
+       // reply of a reply
+       // find parent comment
+       let parentComment = currentComment.parentElement.parentElement.previousSibling
+       // find current id
+       let currentId = parseInt(currentComment.id)
+       // find parent id
+       let parentId = parseInt(parentComment.id)
+       console.log(parentId)
+       // find parent index
+       let parentIndex = storage.comments.findIndex((item) => item.id === parentId)
+        console.log(parentIndex)
+       // find current index
+       let currentIndex = storage.comments[parentIndex].replies.findIndex((item) => item.id === currentId)
+       console.log(currentIndex)
+       // find current text
+       let currentText = currentComment.children[1].firstChild.firstChild
+      //  let theAt = 
+       console.log(currentText)
+       // find the current comment info
+
+       // find parent comment
+
       // find grandparent comment 
-      let grandparentComment = parentComment.parentElement.parentElement.previousSibling
+      // let grandparentComment = parentComment.parentElement.parentElement.previousSibling
       // find current id
-      let currentId = parseInt(currentComment.id)
+      // let currentId = parseInt(currentComment.id)
       // find parent id
-      let parentId = parseInt(parentComment.id)
+      // let parentId = parseInt(parentComment.id)
       // find grandparent id
-      let grandparentId = parseInt(grandparentComment.id)
+      // let grandparentId = parseInt(grandparentComment.id)
   
       // find grandparent index    
-      let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentId)
+      // let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentId)
       // find parent index
-      let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentId)
+      // let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentId)
       // find current index
-      let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentId)
+      // let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentId)
 
       if (e.target.id !== 'editContainer') {
   
-        if (parentComment === null) {
-          console.log('reply')
-        } else {
-          let editContainer = e.target.parentElement.parentElement
-          let theComment = editContainer.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild
-          let theAt = theComment.firstChild.innerHTML
-          let theCommentText = theComment.firstChild.nextSibling.nextSibling.innerHTML
+        // if (parentComment === null) {
+        //   console.log('reply')
+        // } else {
+        //   let editContainer = e.target.parentElement.parentElement
+        //   let theComment = editContainer.parentElement.parentElement.parentElement.parentElement.firstChild.nextSibling.firstChild.firstChild
+        //   let theAt = theComment.firstChild.innerHTML
+        //   let theCommentText = theComment.firstChild.nextSibling.nextSibling.innerHTML
   
-        }
+        // }
   
       }
 
