@@ -6,9 +6,10 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  
-  // bug 6: 3rd level comments share plus/minus with parent
   // bug 6: mobile css got messed up
+
+  // full screen view
+  // sorting logic from readme
 
 
 function App() {

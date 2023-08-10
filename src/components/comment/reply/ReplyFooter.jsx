@@ -16,47 +16,29 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
         let theId = allC[index].replies.findIndex((item) => item.id === record.id)
         
         if (theId === -1) {
-            // reply of reply, bring in adjusted logic from below
-            
+            // reply of reply, bring in adjusted logic from below  
             let comments = JSON.parse(storedComments).comments[index].replies[replyIndex].replies
-            console.log(comments)
             let currentIndex = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id
             currentIndex = parseInt(currentIndex)
-            console.log(currentIndex)
             let currentComment = comments.findIndex((item) => item.id === currentIndex)
-            console.log(currentComment)
-            // increment from here... 
-            console.log(comments[currentComment])
             let updatedComments = [...comments]
             updatedComments[currentComment].score++
-            console.log(updatedComments)
             let newScore = updatedComments[currentComment].score
 
             const updatedAllComments = {...JSON.parse(localStorage.getItem('allComments'))}
             updatedAllComments.comments[index].replies[replyIndex].replies = updatedComments
             localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
-        
-            console.log(e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML)
-            console.log(newScore)
-
             e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
         
         } else {
-            console.log('index: '+index)
-            console.log(replyIndex)
-            
             let comments = JSON.parse(storedComments).comments[index].replies
-            console.log('comments: ', comments)
             const updatedComments = [...comments]
-            console.log(updatedComments[replyIndex])
             updatedComments[replyIndex].score++
             let newScore = updatedComments[replyIndex].score
             
             const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
             updatedAllComments.comments[index].replies = updatedComments
             localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
-            console.log(e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML)
-            console.log(newScore)
             e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
         }
     }
@@ -66,18 +48,36 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
             return
         } else {
             const storedComments = localStorage.getItem('allComments')
-            let comments = JSON.parse(storedComments).comments[index].replies
-            console.log('comments: ', comments)
-            const updatedComments = [...comments]
-            console.log(updatedComments[replyIndex])
-            updatedComments[replyIndex].score--
-            let newScore = updatedComments[replyIndex].score
-            
-            const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
-            updatedAllComments.comments[index].replies = updatedComments
-            localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
-            console.log(newScore)
-            e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = newScore
+            let allC = JSON.parse(storedComments).comments
+            let theId = allC[index].replies.findIndex((item) => item.id === record.id)
+            if (theId === -1) {
+                // reply of reply
+                console.log('minus reply of reply')
+                let comments = JSON.parse(storedComments).comments[index].replies[replyIndex].replies
+                let currentIndex = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id
+                currentIndex = parseInt(currentIndex)
+                let currentComment = comments.findIndex((item) => item.id === currentIndex)
+                let updatedComments = [...comments]
+                updatedComments[currentComment].score--
+                let newScore = updatedComments[currentComment].score
+
+                const updatedAllComments = {...JSON.parse(localStorage.getItem('allComments'))}
+                updatedAllComments.comments[index].replies[replyIndex].replies = updatedComments
+                localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+
+                e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = newScore
+
+            } else {
+                let comments = JSON.parse(storedComments).comments[index].replies
+                const updatedComments = [...comments]
+                updatedComments[replyIndex].score--
+                let newScore = updatedComments[replyIndex].score
+                
+                const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+                updatedAllComments.comments[index].replies = updatedComments
+                localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+                e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = newScore
+            }
         }
 
     }
