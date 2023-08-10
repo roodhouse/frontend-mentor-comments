@@ -26,6 +26,20 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
             let currentComment = comments.findIndex((item) => item.id === currentIndex)
             console.log(currentComment)
             // increment from here... 
+            console.log(comments[currentComment])
+            let updatedComments = [...comments]
+            updatedComments[currentComment].score++
+            console.log(updatedComments)
+            let newScore = updatedComments[currentComment].score
+
+            const updatedAllComments = {...JSON.parse(localStorage.getItem('allComments'))}
+            updatedAllComments.comments[index].replies[replyIndex].replies = updatedComments
+            localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+        
+            console.log(e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML)
+            console.log(newScore)
+
+            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
         
         } else {
             console.log('index: '+index)
