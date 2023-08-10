@@ -11,45 +11,75 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
     theComments = JSON.parse(theComments)
     
     function handlePlus(e) {
-        // get id of the sister comment and then the parent comment
-        let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
+        const storedComments = localStorage.getItem('allComments')
+        let allC = JSON.parse(storedComments).comments
+        let theId = allC[index].replies.findIndex((item) => item.id === record.id)
         
-        let parentComment = sisterComment.parentElement.parentElement.parentElement
+        if (theId === -1) {
+            // reply of reply, bring in adjusted logic from below  
+            let comments = JSON.parse(storedComments).comments[index].replies[replyIndex].replies
+            let currentIndex = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id
+            currentIndex = parseInt(currentIndex)
+            let currentComment = comments.findIndex((item) => item.id === currentIndex)
+            let updatedComments = [...comments]
+            updatedComments[currentComment].score++
+            let newScore = updatedComments[currentComment].score
 
-        if(sisterComment.classList.contains('reply')) {
+            const updatedAllComments = {...JSON.parse(localStorage.getItem('allComments'))}
+            updatedAllComments.comments[index].replies[replyIndex].replies = updatedComments
+            localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
+        
+        } else {
+            let comments = JSON.parse(storedComments).comments[index].replies
+            const updatedComments = [...comments]
+            updatedComments[replyIndex].score++
+            let newScore = updatedComments[replyIndex].score
             
-            sisterComment = sisterComment.id
-            parentComment = parentComment.id
-            
-            parentComment = theComments.comments[index]
-            sisterComment = parentComment.replies[replyIndex]
-
-            sisterComment.score = ++sisterComment.score
-            localStorage.setItem('allComments', JSON.stringify(theComments))
-            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = sisterComment.score   
+            const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+            updatedAllComments.comments[index].replies = updatedComments
+            localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+            e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
         }
     }
 
     function handleMinus(e) {
-        // get id of the sister comment and then the parent comment
-        let sisterComment = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.parentElement
-        let parentComment = sisterComment.parentElement.parentElement.parentElement
+        if (e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML === 0 || e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML === '0') {
+            return
+        } else {
+            const storedComments = localStorage.getItem('allComments')
+            let allC = JSON.parse(storedComments).comments
+            let theId = allC[index].replies.findIndex((item) => item.id === record.id)
+            if (theId === -1) {
+                // reply of reply
+                console.log('minus reply of reply')
+                let comments = JSON.parse(storedComments).comments[index].replies[replyIndex].replies
+                let currentIndex = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id
+                currentIndex = parseInt(currentIndex)
+                let currentComment = comments.findIndex((item) => item.id === currentIndex)
+                let updatedComments = [...comments]
+                updatedComments[currentComment].score--
+                let newScore = updatedComments[currentComment].score
 
-        if(sisterComment.classList.contains('reply')) {
-            sisterComment = sisterComment.id
-            parentComment = parentComment.id
+                const updatedAllComments = {...JSON.parse(localStorage.getItem('allComments'))}
+                updatedAllComments.comments[index].replies[replyIndex].replies = updatedComments
+                localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
 
-            parentComment = theComments.comments[index]
-            sisterComment = parentComment.replies[replyIndex]
+                e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = newScore
 
-            if (sisterComment.score === 0){
-                return
             } else {
-                sisterComment.score = --sisterComment.score
-                localStorage.setItem('allComments', JSON.stringify(theComments))
-                e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = sisterComment.score
+                let comments = JSON.parse(storedComments).comments[index].replies
+                const updatedComments = [...comments]
+                updatedComments[replyIndex].score--
+                let newScore = updatedComments[replyIndex].score
+                
+                const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+                updatedAllComments.comments[index].replies = updatedComments
+                localStorage.setItem('allComments', JSON.stringify(updatedAllComments))
+                e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = newScore
             }
         }
+
     }
 
   return (
@@ -81,7 +111,7 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
                                 <p>Delete</p>
                             </div>
                         </div>
-                        <div id="editContainer" onClick={handleEdit} className='flex items-center'>
+                        <div id="editContainer" onClick={handleEdit} className='editComment flex items-center'>
                             <div id="editIcon" className='mr-2'>
                                 <img src={Edit} alt="Edit" />
                             </div>

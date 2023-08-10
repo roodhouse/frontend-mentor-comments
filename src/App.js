@@ -6,16 +6,16 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // bug 1: cant update more than one +/- at a time
-  // bug 2: a 2nd comment produces the 2nd comment and a blank commment, a 3rd does the same with 2 blank comments
-  // bug 3: if a new comment is added before a reply to a comment is made, then the reply to a comment is placed below the new comment 
-  // bug 4: a 3rd level comment is not able to be edited
-  // bug 5: a 3rd level comment is not able to be deleted
+  // bug 6: mobile css got messed up
+
+  // full screen view
+  // sorting logic from readme
 
 
 function App() {
   const [storage, setStorage] = useState(null);
   const [loggedIn, setLoggedIn] = useState("joe");
+  const [newEntryId, setNewEntryId] = useState(5)
 
   useEffect(() => {
     if (localStorage.getItem("allComments") === null) {
@@ -32,19 +32,23 @@ function App() {
       setStorage(allComments);
       setLoggedIn(loggedIn);
     }
-  }, []);
+
+    
+  
+  },[]);
+
+  
 
   function onSubmit(e) {
     e.preventDefault();
 
     let theContent = e.target.parentElement.parentElement.previousSibling.firstChild.value;
     if (theContent === '') {
-      console.log('empty')
       return
     } else {
         let newId = storage.comments.slice(-1);
         newId = newId[0].id;
-        newId = ++newId;
+        newId = ++newId+'.'+ newId;
     
         let newPng = storage.currentUser.image.png;
         let newWebp = storage.currentUser.image.webp;
@@ -53,7 +57,7 @@ function App() {
         const newResponse = {
           content: theContent,
           createdAt: "today",
-          id: newId,
+          id: newEntryId,
           replies: [],
           score: 0,
           user: {
@@ -64,6 +68,8 @@ function App() {
             username: newUsername,
           },
         };
+
+        setNewEntryId(newEntryId + 1)
     
         const updatedStorage = {
           ...storage,
@@ -101,6 +107,10 @@ function App() {
       replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML =
         "REPLY";
 
+        let replyAt = replyBox.firstChild.firstChild.firstChild.firstChild.firstChild
+        
+        replyAt.innerHTML = '@' + replyingTo + ' '
+
       let replyButton =
         replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling
           .firstChild.nextSibling.firstChild;
@@ -111,18 +121,24 @@ function App() {
         let theContent =
           f.target.parentElement.parentElement.parentElement.firstChild
             .firstChild.value;
-        console.log(theContent)
-        if(theContent === '') {
+            console.log(theContent)
+        let splitContent = theContent.split(' ')
+        console.log(splitContent)
+        if(!splitContent[1]){
           return
         } else {
             let newPng = storage.currentUser.image.png;
             let newWebp = storage.currentUser.image.webp;
             let newUsername = storage.currentUser.username;
-    
+  
+            theContent = theContent.split(' ')
+
+            theContent = ' ' + theContent[1]
+
             const newResponse = {
               content: theContent,
               createdAt: "today",
-              id: storage.comments.length + 1, // You can generate new ID as needed
+              id: newEntryId,
               replyingTo: replyingTo,
               replies: [],
               score: 0,
@@ -134,6 +150,8 @@ function App() {
                 username: newUsername,
               },
             };
+
+            setNewEntryId(newEntryId + 1)
     
             const updatedComments = [...storage.comments];
             updatedComments[parentIndex].replies.push(newResponse);
@@ -149,8 +167,8 @@ function App() {
             replyBox.classList.add("hidden");
             theContent =
               replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
-            theContent.innerHTML = "";
-            theContent.value = "";
+            theContent.innerHTML = ''
+            theContent.value = '@' + replyingTo + ' ';
         }
       });
     } else if (parentIndex === -1) {
@@ -171,60 +189,82 @@ function App() {
           storage.comments[grandparentIndex].replies[parentIndex].user.username;
         replyBox.classList.remove("hidden");
 
+        let replyAt = replyBox.firstChild.firstChild.firstChild.firstChild.firstChild
+        
+        replyAt.innerHTML = '@' + replyingTo + ' '
+
         replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML =
           "REPLY";
-
+          
         let replyButton =
           replyBox.firstChild.firstChild.firstChild.firstChild.nextSibling
             .firstChild.nextSibling.firstChild;
 
-        replyButton.addEventListener("click", (f) => {
-          f.preventDefault();
+        replyButton.addEventListener("click", (g) => {
+          g.preventDefault();
+
 
           let theContent =
-            f.target.parentElement.parentElement.parentElement.firstChild
+            g.target.parentElement.parentElement.parentElement.firstChild
               .firstChild.value;
 
-          let newPng = storage.currentUser.image.png;
-          let newWebp = storage.currentUser.image.webp;
-          let newUsername = storage.currentUser.username;
-
-          const newResponse = {
-            content: theContent,
-            createdAt: "today",
-            id:
-              storage.comments[grandparentIndex].replies[parentIndex].replies
-                .length + 1, // You can generate new ID as needed
-            replyingTo: replyingTo,
-            replies: [],
-            score: 0,
-            user: {
-              image: {
-                png: newPng,
-                webp: newWebp,
+              let splitContent = theContent.split(' ')
+              console.log(splitContent)
+              if(!splitContent[1]){
+                return
+              } else {
+                theContent = theContent.split(' ')
+  
+                theContent = ' ' + theContent[1]
+  
+            let newPng = storage.currentUser.image.png;
+            let newWebp = storage.currentUser.image.webp;
+            let newUsername = storage.currentUser.username;
+  
+            const newResponse = {
+              content: theContent,
+              createdAt: "today",
+              id: newEntryId,
+              replyingTo: replyingTo,
+              replies: [],
+              score: 0,
+              user: {
+                image: {
+                  png: newPng,
+                  webp: newWebp,
+                },
+                username: newUsername,
               },
-              username: newUsername,
-            },
-          };
+            };
+  
+            setNewEntryId(newEntryId + 1)
+  
+  
+            if (newResponse.content === '') {
+              return
+            } else {
+              const updatedComments = [...storage.comments];
+              updatedComments[grandparentIndex].replies[parentIndex].replies.push(
+                newResponse
+              );
+    
+              const updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+    
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage);
+    
+              replyBox.classList.add("hidden");
+              theContent =
+                replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
+              theContent.innerHTML = "";
+              theContent.value = '@' + replyingTo + ' ';
+            }
+                
+              }
 
-          const updatedComments = [...storage.comments];
-          updatedComments[grandparentIndex].replies[parentIndex].replies.push(
-            newResponse
-          );
-
-          const updatedStorage = {
-            ...storage,
-            comments: updatedComments,
-          };
-
-          localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-          setStorage(updatedStorage);
-
-          replyBox.classList.add("hidden");
-          theContent =
-            replyBox.firstChild.firstChild.firstChild.firstChild.firstChild;
-          theContent.innerHTML = "";
-          theContent.value = "";
         });
       }
     }
@@ -244,12 +284,13 @@ function App() {
       let removeText =
         e.target.parentElement.parentElement.parentElement.parentElement
           .firstChild.nextSibling.firstChild.firstChild.firstChild;
+      
       let currentText =
         e.target.parentElement.parentElement.parentElement.parentElement
-          .firstChild.nextSibling.firstChild.firstChild;
+          .firstChild.nextSibling.firstChild.firstChild.lastChild;
       let savedText = currentText.innerHTML;
-      currentText.removeChild(removeText);
-      currentText = removeText.innerHTML + currentText.innerHTML;
+      
+      currentText = savedText
 
       if (currentText === "undefined") {
         currentText = savedText;
@@ -296,7 +337,7 @@ function App() {
         editComment.setAttribute("id", "editComment");
         editComment.setAttribute("cols", 30);
         editComment.setAttribute("rows", 3);
-        editComment.innerHTML = currentText;
+        editComment.innerHTML = removeText.innerHTML + ' ' + currentText;
 
         let editSubmitContainer = document.createElement("div");
         editSubmitContainer.setAttribute("id", "editSubmitContainer");
@@ -340,6 +381,10 @@ function App() {
               );
               let currentComment = parentComment.replies[commentIndex];
               currentText = editComment.value;
+
+              let theAt = currentText.split(currentText.substring(0, currentText.indexOf(' ')))
+
+              currentText = theAt[1]
 
               let updatedComment = {
                 content: currentText,
@@ -386,41 +431,101 @@ function App() {
               e.target.parentElement.parentElement.firstChild.firstChild;
 
             let currentIndex = currentComment - 1;
+            
             currentComment = storage.comments[currentIndex];
             currentText = editComment.value;
 
-            let updatedComment = {
-              content: currentText,
-              createdAt: "today",
-              id: currentComment.id,
-              replies: currentComment.replies,
-              replyingTo: currentComment.replyingTo,
-              score: currentComment.score,
-              user: {
-                image: {
-                  png: currentComment.user.image.png,
-                  webp: currentComment.user.image.webp,
+            if (currentComment !== undefined) {
+              let updatedComment = {
+                content: currentText,
+                createdAt: "today",
+                id: currentComment.id,
+                replies: currentComment.replies,
+                replyingTo: currentComment.replyingTo,
+                score: currentComment.score,
+                user: {
+                  image: {
+                    png: currentComment.user.image.png,
+                    webp: currentComment.user.image.webp,
+                  },
+                  username: currentComment.user.username,
                 },
-                username: currentComment.user.username,
-              },
-            };
+              };
+  
+              const updatedComments = [...storage.comments];
+              updatedComments[currentIndex] = updatedComment;
+  
+              const updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+  
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage);
+              // show updated comment
+              e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove(
+                "hidden"
+              );
+              bodyContainer.removeChild(editCommentWrapper);
+            } else {
+                currentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
+                .parentElement.parentElement.parentElement.parentElement.id)
+                
+                let parentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
+                  .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id)
 
-            const updatedComments = [...storage.comments];
-            updatedComments[currentIndex] = updatedComment;
+                let grandparentComment = parseInt(e.target.parentElement.parentElement.parentElement.parentElement
+                  .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+                  .parentElement.parentElement.id)
 
-            const updatedStorage = {
-              ...storage,
-              comments: updatedComments,
-            };
+                let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentComment);
 
-            localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-            setStorage(updatedStorage);
-            // show updated comment
-            e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove(
-              "hidden"
-            );
-            bodyContainer.removeChild(editCommentWrapper);
-          }
+                let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentComment)
+
+                let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentComment)
+
+                let current = storage.comments[grandparentIndex].replies[parentIndex].replies[currentIndex]
+
+                let theAt = currentText.split(currentText.substring(0, currentText.indexOf(' ')))
+
+              currentText = theAt[1]
+
+                let updatedComment = {
+                  content: currentText,
+                  createdAt: 'today',
+                  id: current.id,
+                  replies: current.replies,
+                  replyingTo: current.replyingTo,
+                  score: current.score,
+                  user: {
+                    image: {
+                      png: current.user.image.png,
+                      webp: current.user.image.webp
+                    },
+                    username: current.user.username
+                  }
+                }
+                
+              const updatedComments = [...storage.comments];
+
+              updatedComments[grandparentIndex].replies[parentIndex].replies[currentIndex] = updatedComment
+  
+              const updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+  
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage);
+              // show updated comment
+              e.target.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling.classList.remove(
+                "hidden"
+              );
+              bodyContainer.removeChild(editCommentWrapper);
+
+              }
+            }
+
         });
       }
     }
@@ -434,7 +539,6 @@ function App() {
     if (deleteId === null) {
       deleteId = e.target.closest('.mainComment')
       deleteId = parseInt(deleteId.id)
-      let deleteIndex = deleteId - 1
       let deleteComment = e.target;
       let deleteWrapper = document.getElementById("deleteWrapper");
       deleteWrapper.classList.remove("hidden");
@@ -530,38 +634,76 @@ function App() {
           );
     
           if (deleteIndex === -1) {
-            console.log('sub comment')
-            console.log(deleteId)
-            let parentId = e.target.closest('.mainComment')
+
+            // comment of a comment
+            let currentId = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+            let parentId = currentId.parentElement.parentElement.parentElement
+            let grandparentId = parentId.parentElement.parentElement.parentElement
+
+            currentId = parseInt(currentId.id)
             parentId = parseInt(parentId.id)
-            let parentIndex = parentId - 1
-            console.log(parentIndex)
-            deleteIndex = storage.comments.findIndex( (item) => item.id === parentId)
-    
-            let updatedComments = storage.comments
-    
-            let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index){
-              console.log(index)
-              console.log(deleteIndex)
-              return index !== deleteIndex
-            })
-    
-            updatedComments[parentIndex].replies = newCommentsArray
-    
-            let updatedStorage = {
-              ...storage,
-              comments: updatedComments,
-            };
-                  localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-                  setStorage(updatedStorage);
-    
-                  // revert the disable scroll function above
+            grandparentId = parseInt(grandparentId.id)
+
+            if (isNaN(grandparentId)) {
+              // reply of reply
+              let parentIndex = storage.comments.findIndex((item) => item.id === parentId)
+              let currentIndex = storage.comments[parentIndex].replies.findIndex((item) => item.id === currentId)
+
+              let updatedComments = storage.comments
+              let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index) {
+                return index !== currentIndex
+              })
+              
+              updatedComments[parentIndex].replies = newCommentsArray
+
+              let updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+              setStorage(updatedStorage)
+
+              // revert the disable scroll function 
               function enableScroll() {
                 window.onscroll = function () {};
               }
-              enableScroll();
-                  deleteWrapper = document.getElementById("deleteWrapper");
-                  deleteWrapper.classList.add("hidden");
+              enableScroll()
+              deleteWrapper = document.getElementById('deleteWrapper')
+              deleteWrapper.classList.add('hidden')
+
+            } else {
+              let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentId)
+          
+              let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentId)
+  
+              let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentId )
+  
+              let updatedComments = storage.comments
+      
+              let newCommentsArray = updatedComments[grandparentIndex].replies[parentIndex].replies.filter(function (item, index){
+                
+                return index !== currentIndex
+              })
+      
+              updatedComments[grandparentIndex].replies[parentIndex].replies = newCommentsArray
+      
+              let updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+              };
+                    localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+                    setStorage(updatedStorage);
+      
+                    // revert the disable scroll function above
+                function enableScroll() {
+                  window.onscroll = function () {};
+                }
+                enableScroll();
+                    deleteWrapper = document.getElementById("deleteWrapper");
+                    deleteWrapper.classList.add("hidden");
+            }
+
     
           } else {
               let updatedComments = storage.comments.filter(function (item, index) {

@@ -12,7 +12,6 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
         <div id='replyContainer' className='border-l-[2px] border-l-lightGray pl-4'>
             {
                 record.replies.map((reply, replyIndex) => {
-                    console.log(reply)
                     return(
                         reply.replies.length > 0 ? (
                             <>
@@ -30,7 +29,7 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
                                     <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
                                 </div>
                                 <div id='commentReplyWrapper'>
-                                    <CommentReply record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} />
+                                    <CommentReply record={reply} loggedIn={loggedIn} index={index} replyIndex={replyIndex} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
                                 </div>
                             </div>
                             </>
