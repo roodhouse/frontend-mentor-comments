@@ -17,24 +17,26 @@ function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, hand
                     return(
                         
                         record.replies.length > 0 ? (
+                            <>
+                                <div id={record.id} className='mainComment bg-white mb-4 p-4 rounded-lg'>
+                                    <div id="headerWrapper">
+                                        <Header record={record} loggedIn={loggedIn} />
+                                    </div>
+                                    <div id="commentBodyWrapper" className='mb-4'>
+                                        <Body record={record} />
+                                    </div>
+                                    <div id="commentFooterWrapper">
+                                        <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
+                                    </div>
+                                    <div id="replyCommentWrapper" className='hidden'>
+                                        <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
+                                    </div>
+                                </div>    
+                                    <div id='replyWrapper'>
+                                        <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
+                                    </div>
                             
-                        <div id={record.id} className='mainComment bg-white mb-4 p-4 rounded-lg'>
-                            <div id="headerWrapper">
-                                <Header record={record} loggedIn={loggedIn} />
-                            </div>
-                            <div id="commentBodyWrapper" className='mb-4'>
-                                <Body record={record} />
-                            </div>
-                            <div id="commentFooterWrapper">
-                                <Footer record={record} loggedIn={loggedIn} index={index} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
-                            </div>
-                            <div id="replyCommentWrapper" className='hidden'>
-                                <Add allComments={allComments} loggedIn={loggedIn} onSubmit={onSubmit} />
-                            </div>
-                            <div id='replyWrapper'>
-                                 <Reply record={record} loggedIn={loggedIn} index={index} allComments={allComments} onSubmit={onSubmit} handleReply={handleReply} handleEdit={handleEdit} handleDelete={handleDelete} />
-                            </div>
-                        </div>    
+                            </>
                         ) : (
                         <div id={record.id} className='mainComment bg-white mb-4 p-4 rounded-lg'>
                             <div id="headerWrapper">
