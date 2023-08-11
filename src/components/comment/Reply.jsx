@@ -19,7 +19,7 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
                                 <div id='replyHeaderWrapper' className='md:ml-16'>
                                     <ReplyHeader record={reply} loggedIn={loggedIn} />
                                 </div>
-                                <div id='replyBodyWrapper' className='mb-4 md:ml-16 md:mb-0'>
+                                <div id='replyBodyWrapper' className='mb-4 md:ml-16 md:mb-0 md:min-h-[72px]'>
                                     <ReplyBody record={reply} />
                                 </div>
                                 <div id="replyFooterWrapper" className='md:relative'>
@@ -40,7 +40,7 @@ function Reply({record, loggedIn, index, allComments, onSubmit, handleReply, han
                                 <div id='replyHeaderWrapper' className='md:ml-16'>
                                     <ReplyHeader record={reply} loggedIn={loggedIn} />
                                 </div>
-                                <div id='replyBodyWrapper' className='mb-4 md:ml-16 md:mb-0'>
+                                <div id='replyBodyWrapper' className='mb-4 md:ml-16 md:mb-0 md:min-h-[72px]'>
                                     <ReplyBody record={reply} />
                                 </div>
                                 <div id="replyFooterWrapper" className='md:relative'>
