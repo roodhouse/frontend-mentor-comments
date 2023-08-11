@@ -8,7 +8,7 @@ function CommentReply({record, loggedIn, index, replyIndex, allComments, onSubmi
   return (
 
     <>
-        <div id="commentReplyContainer" className='border-l-[2px] border-l-lightGray pl-4'>
+        <div id="commentReplyContainer" className='border-l-[2px] border-l-lightGray pl-4 md:ml-0 md:pl-[4px]'>
             {
                 record.replies.map((reply, commentReplyIndex) => {
                     return(

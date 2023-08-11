@@ -8,8 +8,7 @@ import Delete from './components/Delete';
 
 
   // full screen view
-    // reply of reply
-    // comment at bottom
+    // new comment
     // update
     // delete
     // loggedin
