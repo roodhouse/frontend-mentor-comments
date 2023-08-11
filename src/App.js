@@ -6,10 +6,6 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // css fixed but bugs reintroduced
-  // bug 4: cannnot delete created comment
-  // bug 2: cannot delete first level reply
-  // bug 6: cannnot delete 3rd level comment
 
   // full screen view
   // sorting logic from readme
@@ -278,20 +274,6 @@ function App() {
 
   // edit button click logic
   function handleEdit(e) {
-    // let commentId =
-    //   e.target.parentElement.parentElement.parentElement.parentElement
-    //     .parentElement.parentElement;
-        
-    // let parentId = commentId.parentElement.parentElement.parentElement;
-    
-    // commentId = parseInt(commentId.id);
-    // parentId = parseInt(parentId.id);
-
-    // let mainComment = e.target.closest('.mainComment')
-
-    //       let parentIndex = storage.comments.findIndex(
-    //         (item) => item.id === parentId
-    //       );
     
     // find current comment
     let currentComment = e.target.closest('.reply')
@@ -662,30 +644,26 @@ function App() {
 
   // delete button logic
   function handleDelete(e) {
-    
-    let deleteId = e.target.closest('.reply')
-    
-    if (deleteId === null) {
-      deleteId = e.target.closest('.mainComment')
-      deleteId = parseInt(deleteId.id)
-      let deleteComment = e.target;
-      let deleteWrapper = document.getElementById("deleteWrapper");
-      deleteWrapper.classList.remove("hidden");
-      deleteWrapper = deleteWrapper.firstChild.firstChild;
-      document.getElementById("mainWrapper").scrollIntoView();
+    // display the delete module
+    let currentComment = e.target.closest('.reply')
+    let deleteWrapper = document.getElementById("deleteWrapper");
+    deleteWrapper.classList.remove("hidden");
+    deleteWrapper = deleteWrapper.firstChild.firstChild;
+    document.getElementById("mainWrapper").scrollIntoView();
 
+    // prevent scroll
         function disableScroll() {
           // Get the current page scroll position
           let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          let scrollLeft =
-            window.pageXOffset || document.documentElement.scrollLeft;
+          let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
           // if any scroll is attempted, set this to the previous value
           window.onscroll = function () {
             window.scrollTo(scrollLeft, scrollTop);
           };
         }
         disableScroll();
-
+    
+    // cancel button logic
         let cancelButton = document.getElementById("noButton");
         cancelButton.addEventListener("click", () => {
           // revert the disable scroll function above
@@ -695,168 +673,129 @@ function App() {
           enableScroll();
           deleteWrapper = document.getElementById("deleteWrapper");
           deleteWrapper.classList.add("hidden");
-          deleteComment.scrollIntoView();
-        });
-
-        let confirmButton = document.getElementById('yesButton')
-        confirmButton.addEventListener('click', () => {
-          let deleteIndex = storage.comments.findIndex(
-            (item) => item.id === deleteId
-          );
-          let updatedComments = storage.comments.filter(function (item, index) {
-            return index !== deleteIndex
-          })
-    
-          let updatedStorage = {
-            ...storage,
-            comments: updatedComments,
-          };
-    
-          localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-              setStorage(updatedStorage);
-    
-              // revert the disable scroll function above
-          function enableScroll() {
-            window.onscroll = function () {};
-          }
-          enableScroll();
-              deleteWrapper = document.getElementById("deleteWrapper");
-              deleteWrapper.classList.add("hidden");
-        })
-
-    } else {
-        deleteId = parseInt(deleteId.id)
-        let deleteComment = e.target;
-        let deleteWrapper = document.getElementById("deleteWrapper");
-        deleteWrapper.classList.remove("hidden");
-        deleteWrapper = deleteWrapper.firstChild.firstChild;
-        document.getElementById("mainWrapper").scrollIntoView();
-    
-        function disableScroll() {
-          // Get the current page scroll position
-          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          let scrollLeft =
-            window.pageXOffset || document.documentElement.scrollLeft;
-          // if any scroll is attempted, set this to the previous value
-          window.onscroll = function () {
-            window.scrollTo(scrollLeft, scrollTop);
-          };
-        }
-        disableScroll();
-    
-        let cancelButton = document.getElementById("noButton");
-        cancelButton.addEventListener("click", () => {
-          // revert the disable scroll function above
-          function enableScroll() {
-            window.onscroll = function () {};
-          }
-          enableScroll();
-          deleteWrapper = document.getElementById("deleteWrapper");
-          deleteWrapper.classList.add("hidden");
-          deleteComment.scrollIntoView();
+          currentComment.scrollIntoView();
         });
     
+    // confirm button logic
         let confirmButton = document.getElementById('yesButton')
-        confirmButton.addEventListener('click', () => {
-          let deleteIndex = storage.comments.findIndex(
-            (item) => item.id === deleteId
-          );
-    
-          if (deleteIndex === -1) {
 
-            // comment of a comment
-            let currentId = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
-            let parentId = currentId.parentElement.parentElement.parentElement
-            let grandparentId = parentId.parentElement.parentElement.parentElement
+    // find current comment
+    if (currentComment === null) {
+      // main comment
+      currentComment = e.target.closest('.mainComment')
 
-            currentId = parseInt(currentId.id)
-            parentId = parseInt(parentId.id)
-            grandparentId = parseInt(grandparentId.id)
+      // find current comment index
+      let currentId = parseInt(currentComment.id)
 
-            if (isNaN(grandparentId)) {
-              // reply of reply
-              let parentIndex = storage.comments.findIndex((item) => item.id === parentId)
-              let currentIndex = storage.comments[parentIndex].replies.findIndex((item) => item.id === currentId)
+      let currentIndex = storage.comments.findIndex((item) => item.id === currentId)
 
-              let updatedComments = storage.comments
-              let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index) {
-                return index !== currentIndex
-              })
-              
-              updatedComments[parentIndex].replies = newCommentsArray
+      // confirm button logic
+      confirmButton.addEventListener('click', () => {
 
-              let updatedStorage = {
+        // return all items in the array except for our current index
+        let updatedComments = storage.comments.filter(function (item, index) {
+              return index !== currentIndex
+                })
+
+                // update the storage
+                  let updatedStorage = {
                 ...storage,
                 comments: updatedComments,
-              };
-
-              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-              setStorage(updatedStorage)
-
-              // revert the disable scroll function 
-              function enableScroll() {
-                window.onscroll = function () {};
-              }
-              enableScroll()
-              deleteWrapper = document.getElementById('deleteWrapper')
-              deleteWrapper.classList.add('hidden')
-
-            } else {
-              let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentId)
-          
-              let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentId)
-  
-              let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentId )
-  
-              let updatedComments = storage.comments
-      
-              let newCommentsArray = updatedComments[grandparentIndex].replies[parentIndex].replies.filter(function (item, index){
-                
-                return index !== currentIndex
-              })
-      
-              updatedComments[grandparentIndex].replies[parentIndex].replies = newCommentsArray
-      
-              let updatedStorage = {
-                ...storage,
-                comments: updatedComments,
-              };
-                    localStorage.setItem("allComments", JSON.stringify(updatedStorage));
-                    setStorage(updatedStorage);
-      
-                    // revert the disable scroll function above
-                function enableScroll() {
-                  window.onscroll = function () {};
-                }
-                enableScroll();
-                    deleteWrapper = document.getElementById("deleteWrapper");
-                    deleteWrapper.classList.add("hidden");
-            }
-
-    
-          } else {
-              let updatedComments = storage.comments.filter(function (item, index) {
-                return index !== deleteIndex
-              })
-        
-              let updatedStorage = {
-                ...storage,
-                comments: updatedComments,
-              };
+                };
         
               localStorage.setItem("allComments", JSON.stringify(updatedStorage));
                   setStorage(updatedStorage);
         
-                  // revert the disable scroll function above
+        // revert the disable scroll function above
               function enableScroll() {
                 window.onscroll = function () {};
               }
               enableScroll();
-                  deleteWrapper = document.getElementById("deleteWrapper");
-                  deleteWrapper.classList.add("hidden");
-          }
-              
+
+             deleteWrapper = document.getElementById("deleteWrapper");
+             deleteWrapper.classList.add("hidden");    
+      })
+    } else {
+      // reply of comment
+      // find parent comment 
+      let parentComment = currentComment.parentElement.parentElement.previousSibling
+      // find parent index
+      let parentId = parseInt(parentComment.id)
+      let parentIndex = storage.comments.findIndex((item) => item.id === parentId)
+
+      if (parentIndex !== -1) {
+        // find current comment index
+        let currentId = parseInt(currentComment.id)
+        let currentIndex = storage.comments[parentIndex].replies.findIndex((item) => item.id === currentId)
+        // confirm button logic
+      confirmButton.addEventListener('click', () => {
+        // return all items in the array except for our current index
+        let updatedComments = storage.comments
+        let newCommentsArray = updatedComments[parentIndex].replies.filter(function (item, index) {
+              return index !== currentIndex
+              })
+        updatedComments[parentIndex].replies = newCommentsArray
+
+        // update the storage
+                  let updatedStorage = {
+                ...storage,
+                comments: updatedComments,
+                };
+        
+              localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+                  setStorage(updatedStorage);
+        
+        // revert the disable scroll function above
+              function enableScroll() {
+                window.onscroll = function () {};
+              }
+              enableScroll();
+
+             deleteWrapper = document.getElementById("deleteWrapper");
+             deleteWrapper.classList.add("hidden");    
+      })
+      } else {
+        // current Comment id
+        let currentId = parseInt(currentComment.id)
+        // grandparent comment
+        let grandparentComment = parentComment.parentElement.parentElement.previousSibling
+        // grandparent id
+        let grandparentId = parseInt(grandparentComment.id)
+        // parent index
+        // grandparent index
+        let grandparentIndex = storage.comments.findIndex((item) => item.id === grandparentId)
+        let parentIndex = storage.comments[grandparentIndex].replies.findIndex((item) => item.id === parentId)
+        let currentIndex = storage.comments[grandparentIndex].replies[parentIndex].replies.findIndex((item) => item.id === currentId)
+
+        // confirm button logic
+        confirmButton.addEventListener('click', () => {
+          // return all items in the array except for our current index
+          let updatedComments = storage.comments
+          let newCommentsArray = updatedComments[grandparentIndex].replies[parentIndex].replies.filter(function (item, index) {
+                return index !== currentIndex
+                })
+
+          updatedComments[grandparentIndex].replies[parentIndex].replies = newCommentsArray
+  
+          // update the storage
+                    let updatedStorage = {
+                  ...storage,
+                  comments: updatedComments,
+                  };
+          
+                localStorage.setItem("allComments", JSON.stringify(updatedStorage));
+                    setStorage(updatedStorage);
+          
+          // revert the disable scroll function above
+                function enableScroll() {
+                  window.onscroll = function () {};
+                }
+                enableScroll();
+  
+               deleteWrapper = document.getElementById("deleteWrapper");
+               deleteWrapper.classList.add("hidden");    
         })
+      } 
     }
   }
 
