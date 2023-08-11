@@ -3,9 +3,9 @@ import React from 'react'
 function Delete() {
   return (
     <>
-      <div id="deleteContainer">
+      <div id="deleteContainer" className='flex justify-center'>
         <div className='bg-black h-screen opacity-50 absolute w-full top-0' />
-        <div id="deleteModule" className='bg-white py-6 px-7 mx-4 rounded-lg absolute top-[25%]'>
+        <div id="deleteModule" className='bg-white py-6 px-7 mx-4 rounded-lg absolute top-[25%] max-w-[343px]'>
           <div id="deleteTop" className='text-darkBlue text-xl font-medium leading-normal mb-4'>
             <p>Delete comment</p>
           </div>

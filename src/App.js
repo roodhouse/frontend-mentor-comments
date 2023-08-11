@@ -8,6 +8,12 @@ import Delete from './components/Delete';
 
 
   // full screen view
+    // reply 
+    // reply of reply
+    // comment at bottom
+    // update
+    // delete
+    // loggedin
   // sorting logic from readme
 
 
@@ -801,9 +807,9 @@ function App() {
 
   return (
     <div className="App" id="app">
-      <div id="mainWrapper">
-        <div id="mainContainer" className="bg-veryLightGray py-8">
-          <div id="commentReplyWrapper" className=" px-4">
+      <div id="mainWrapper" className='bg-veryLightGray sm:flex sm:justify-center'>
+        <div id="mainContainer" className="bg-veryLightGray py-8 max-w-[730px] md:py-16">
+          <div id="commentReplyWrapper" className="px-4 md:px-0">
             <div id="commentWrapper">
               <Comment
                 allComments={storage}
@@ -814,7 +820,7 @@ function App() {
               />
             </div>
           </div>
-          <div id="addCommentWrapper" className="px-4">
+          <div id="addCommentWrapper" className="px-4 md:px-0">
             <Add
               allComments={storage}
               loggedIn={loggedIn}
