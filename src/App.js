@@ -430,9 +430,103 @@ function App() {
        console.log(currentIndex)
        // find current text
        let currentText = currentComment.children[1].firstChild.firstChild
-      //  let theAt = 
-       console.log(currentText)
+       let theAt = currentText.firstChild.innerHTML
+       let theCommentText = currentText.firstChild.nextSibling.nextSibling.innerHTML
        // find the current comment info
+       let currentCommentInfo = storage.comments[parentIndex].replies[currentIndex]
+       console.log(currentCommentInfo)
+       // hide the current comment
+       currentComment.children[1].firstChild.firstChild.classList.add('hidden')
+       // show the comment box
+       let bodyContainer = currentComment.children[1].firstChild
+
+        let editCommentWrapper = document.createElement("div");
+        editCommentWrapper.setAttribute("id", "editCommentWrapper");
+
+        let editCommentContainer = document.createElement("div");
+        editCommentContainer.setAttribute("id", "editCommentContainer");
+        editCommentContainer.classList.add("bg-white", "rounded-lg", "p-4");
+
+        let formContainer = document.createElement("div");
+        formContainer.setAttribute("id", "formContainer");
+
+        let form = document.createElement("form");
+        form.setAttribute("novalidate", true);
+        form.classList.add("flex", "flex-col");
+
+        let editTextContainer = document.createElement("div");
+        editTextContainer.setAttribute("id", "editTextContainer");
+        editTextContainer.classList.add(
+          "mb-4",
+          "rounded-lg",
+          "border",
+          "border-lightGray",
+          "pt-3",
+          "pl-6"
+        );
+
+        let editComment = document.createElement("textarea");
+        editComment.setAttribute("name", "editComment");
+        editComment.setAttribute("id", "editComment");
+        editComment.setAttribute("cols", 30);
+        editComment.setAttribute("rows", 3);
+
+        editComment.innerHTML = theAt + ' ' + theCommentText
+    
+        let editSubmitContainer = document.createElement("div");
+        editSubmitContainer.setAttribute("id", "editSubmitContainer");
+        editSubmitContainer.classList.add(
+          "bg-moderateBlue",
+          "text-white",
+          "rounded-lg",
+          "py-3",
+          "px-[30px]",
+          "w-[102px]",
+          "flex",
+          "justify-center",
+          "self-end"
+        );
+
+        let updateButton = document.createElement("button");
+        updateButton.setAttribute("type", "submit");
+        updateButton.innerHTML = "UPDATE";
+
+        bodyContainer.appendChild(editCommentWrapper);
+        editCommentWrapper.appendChild(editCommentContainer);
+        editCommentContainer.appendChild(formContainer);
+        formContainer.appendChild(form);
+        form.appendChild(editTextContainer);
+        editTextContainer.appendChild(editComment);
+        form.appendChild(editSubmitContainer);
+        editSubmitContainer.appendChild(updateButton);
+
+         // add event listener for submit 
+         updateButton.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          currentText = editComment.value
+          console.log(currentText)
+
+          // need to remove @ and replace with the removed div or what ever it did
+          let updatedComment = {
+            content: currentText,
+            createdAt: "today",
+            id: currentCommentInfo.id,
+            replies: currentCommentInfo.replies,
+            replyingTo: currentCommentInfo.replyingTo,
+            score: currentCommentInfo.score,
+            user: {
+              image: {
+                png: currentCommentInfo.user.image.png,
+                webp: currentCommentInfo.user.image.webp,
+              },
+              username: currentCommentInfo.user.username,
+            },
+          };
+
+          console.log(updatedComment)
+        
+         })
 
        // find parent comment
 
@@ -729,6 +823,7 @@ function App() {
     //   }
     // }
   }
+  
 
   // delete button logic
   function handleDelete(e) {
