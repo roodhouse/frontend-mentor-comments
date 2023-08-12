@@ -7,6 +7,10 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
   // sorting logic from readme
+  // sort the 1st level comments by their score
+  // grab all the scores and put them into an array
+  // then find in local storage the comments based on the score
+  // then sort based on highest to lowest...
 
 
 function App() {

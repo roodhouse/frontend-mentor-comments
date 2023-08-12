@@ -5,8 +5,6 @@ import Footer from './comment/Footer'
 import Reply from './comment/Reply'
 import Add from './Add'
 
-// fix css
-
 function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, handleDelete}) {
   return (
     <>
