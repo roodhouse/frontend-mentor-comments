@@ -4,14 +4,14 @@ function Add({allComments, loggedIn, onSubmit}) {
 
   return (
     <>
-        <div id="addCommentContainer" className='bg-white rounded-lg p-4'>
+        <div id="addCommentContainer" className='bg-white rounded-lg p-4 md:p-6 md:h-[144px]'>
             <div id="formContainer">
                 <form noValidate>
-                    <div id="textContainer" className='mb-4 rounded-lg border border-lightGray pt-3 pl-6'>
-                        <textarea name="newComment" id="newComment" placeholder='Add a comment...' cols="30" rows="3" className='placeholder:text-base placeholder:font-normal placeholder:text-grayishBlue'></textarea>
+                    <div id="textContainer" className='mb-4 rounded-lg border border-lightGray pt-3 pl-6 md:ml-[56px] md:mr-[120px] md:mb-0'>
+                        <textarea name="newComment" id="newComment" placeholder='Add a comment...' cols="30" rows="3" className='w-full placeholder:text-base placeholder:font-normal placeholder:text-grayishBlue'></textarea>
                     </div>
-                    <div id="iconSendContainer" className='flex justify-between items-center'>
-                        <div id="iconContainer" className='w-8 h-8'>
+                    <div id="iconSendContainer" className='flex justify-between items-center md:mt-[-92px]'>
+                        <div id="iconContainer" className='w-8 h-8 md:w-10 md:h-10'>
                             <img src=
                             {
                                 allComments === null ? (

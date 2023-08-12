@@ -9,7 +9,8 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
 
     let theComments = localStorage.getItem('allComments')
     theComments = JSON.parse(theComments)
-    
+
+ 
     function handlePlus(e) {
         const storedComments = localStorage.getItem('allComments')
         let allC = JSON.parse(storedComments).comments
@@ -84,17 +85,17 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
 
   return (
     <>
-        <div id="replyFooterContainer" className='flex justify-between items-center'>
-            <div id="replyCounterContainer" className='flex items-center py-[10px] pr-[10px] pl-[15px] bg-veryLightGray rounded-[10px]'>
-                <div id="replyPlus" className='mr-[9px]'>
+        <div id="replyFooterContainer" className='flex justify-between items-center md:absolute md:w-[595px] md:items-start md:bottom-0'>
+            <div id="replyCounterContainer" className='flex items-center py-[10px] pr-[10px] pl-[15px] bg-veryLightGray rounded-[10px] md:flex-col md:py-0 md:px-0 md:w-10'>
+                <div id="replyPlus" className='mr-[9px] md:mr-0 md:mb-[19px] md:pt-3'>
                     <button onClick={handlePlus}>
                         <img src={Plus} alt="Plus" />
                     </button>
                 </div>
-                <div id="replyScoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px]'>
+                <div id="replyScoreContainer" className='text-moderateBlue text-center text-base font-medium leading-normal mr-[13px] md:mr-0 md:mb-[21px]'>
                          <p id={record.id+'current'}>{record.score}</p>
                 </div>
-                <div id="replyMinus">
+                <div id="replyMinus" className='md:mb-4'>
                     <button onClick={handleMinus} className='flex items-center'>
                         <img src={Minus} alt="Minus" />
                     </button>
