@@ -6,8 +6,6 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-  // id's are only triggering new at refresh.. a new commment and a 2nd new comment after will produce the same Id at 
-  // a refresh the id is incremented up 1 but the same issue happens
   // sorting logic from readme
 
 
@@ -241,7 +239,6 @@ function App() {
   
             setNewEntryId(newEntryId + 1)
   
-  
             if (newResponse.content === '') {
               return
             } else {
@@ -278,7 +275,6 @@ function App() {
     let commentFooterContainer = e.target.parentElement.parentElement.parentElement.parentElement
    
     if (window.innerWidth >= 768) {
-      console.log('768 or bigger')
        commentFooterContainer.classList.add('md:mb-[118px]')
     }
     // find current comment
@@ -399,7 +395,6 @@ function App() {
         bodyContainer.removeChild(editCommentWrapper);
 
         if (window.innerWidth >= 768) {
-          console.log('768 or bigger')
            commentFooterContainer.classList.remove('md:mb-[118px]')
         }
         })
@@ -530,7 +525,6 @@ function App() {
          bodyContainer.removeChild(editCommentWrapper);
 
          if (window.innerWidth >= 768) {
-          console.log('768 or bigger')
            commentFooterContainer.classList.remove('md:mb-[118px]')
         }
           })
@@ -659,7 +653,6 @@ function App() {
         bodyContainer.removeChild(editCommentWrapper);
 
         if (window.innerWidth >= 768) {
-          console.log('768 or bigger')
            commentFooterContainer.classList.remove('md:mb-[118px]')
         }
          })
