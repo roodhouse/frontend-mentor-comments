@@ -22,7 +22,7 @@ function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, hand
                                     <div id="headerWrapper" className='md:ml-16'>
                                         <Header record={record} loggedIn={loggedIn} />
                                     </div>
-                                    <div id="commentBodyWrapper" className='mb-4 md:ml-16 md:mb-0'>
+                                    <div id="commentBodyWrapper" className='mb-4 md:ml-16 md:mb-0 md:min-h-[72px]'>
                                         <Body record={record} />
                                     </div>
                                     <div id="commentFooterWrapper" className='md:relative'>
@@ -42,7 +42,7 @@ function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, hand
                             <div id="headerWrapper" className='md:ml-16'>
                                 <Header record={record} />
                             </div>
-                            <div id="commentBodyWrapper" className='mb-4 md:ml-16 md:mb-0'>
+                            <div id="commentBodyWrapper" className='mb-4 md:ml-16 md:mb-0 md:min-h-[72px]'>
                                 <Body record={record} />
                             </div>
                             <div id="commentFooterWrapper" className='md:relative'>

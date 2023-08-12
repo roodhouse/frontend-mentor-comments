@@ -6,12 +6,8 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-
-  // full screen view
-    // new comment
-    // update
-    // delete
-    // loggedin
+  // id's are only triggering new at refresh.. a new commment and a 2nd new comment after will produce the same Id at 
+  // a refresh the id is incremented up 1 but the same issue happens
   // sorting logic from readme
 
 
@@ -278,7 +274,13 @@ function App() {
 
   // edit button click logic
   function handleEdit(e) {
-    
+    // change the markup
+    let commentFooterContainer = e.target.parentElement.parentElement.parentElement.parentElement
+   
+    if (window.innerWidth >= 768) {
+      console.log('768 or bigger')
+       commentFooterContainer.classList.add('md:mb-[118px]')
+    }
     // find current comment
     let currentComment = e.target.closest('.reply')
     // find parent comment
@@ -320,7 +322,8 @@ function App() {
           "border",
           "border-lightGray",
           "pt-3",
-          "pl-6"
+          "pl-6",
+          "z-[99]"
         );
 
         let editComment = document.createElement("textarea");
@@ -328,6 +331,7 @@ function App() {
         editComment.setAttribute("id", "editComment");
         editComment.setAttribute("cols", 30);
         editComment.setAttribute("rows", 3);
+        editComment.classList.add('w-full')
 
         editComment.innerHTML = currentText
     
@@ -393,6 +397,11 @@ function App() {
         // show updated comment
         currentComment.children[1].firstChild.firstChild.classList.remove('hidden')
         bodyContainer.removeChild(editCommentWrapper);
+
+        if (window.innerWidth >= 768) {
+          console.log('768 or bigger')
+           commentFooterContainer.classList.remove('md:mb-[118px]')
+        }
         })
       
     } else {
@@ -442,7 +451,8 @@ function App() {
            "border",
            "border-lightGray",
            "pt-3",
-           "pl-6"
+           "pl-6",
+           "z-[99]"
          );
  
          let editComment = document.createElement("textarea");
@@ -450,6 +460,7 @@ function App() {
          editComment.setAttribute("id", "editComment");
          editComment.setAttribute("cols", 30);
          editComment.setAttribute("rows", 3);
+         editComment.classList.add('w-full')
  
          editComment.innerHTML = theAt + ' ' + theCommentText
      
@@ -517,6 +528,11 @@ function App() {
          // // show updated comment
          currentComment.children[1].firstChild.firstChild.classList.remove('hidden')
          bodyContainer.removeChild(editCommentWrapper);
+
+         if (window.innerWidth >= 768) {
+          console.log('768 or bigger')
+           commentFooterContainer.classList.remove('md:mb-[118px]')
+        }
           })
        } else {
         // reply of reply of comment
@@ -564,7 +580,8 @@ function App() {
            "border",
            "border-lightGray",
            "pt-3",
-           "pl-6"
+           "pl-6",
+           "z-[99]"
          );
  
          let editComment = document.createElement("textarea");
@@ -572,6 +589,7 @@ function App() {
          editComment.setAttribute("id", "editComment");
          editComment.setAttribute("cols", 30);
          editComment.setAttribute("rows", 3);
+         editComment.classList.add('w-full')
  
          editComment.innerHTML = theAt + ' ' + theCommentText
      
@@ -639,6 +657,11 @@ function App() {
         // // show updated comment
         currentComment.children[1].firstChild.firstChild.classList.remove('hidden')
         bodyContainer.removeChild(editCommentWrapper);
+
+        if (window.innerWidth >= 768) {
+          console.log('768 or bigger')
+           commentFooterContainer.classList.remove('md:mb-[118px]')
+        }
          })
 
        }
