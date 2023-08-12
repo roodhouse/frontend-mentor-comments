@@ -21,6 +21,7 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
         console.log(newScore)
         const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
         updatedAllComments.comments= updatedComments
+        // add sort logic here?
         localStorage.setItem('allComments', JSON.stringify(updatedAllComments));
         e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
        

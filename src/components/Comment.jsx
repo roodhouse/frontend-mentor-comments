@@ -6,11 +6,18 @@ import Reply from './comment/Reply'
 import Add from './Add'
 
 function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, handleDelete}) {
+
+    if (!allComments || !allComments.comments) {
+        return null; // or some loading indicator or placeholder
+      }
+
+    const sortedComments = [...allComments.comments].sort((a, b) => b.score - a.score);
+
   return (
     <>
         <div id="commentContainer">
             {
-                allComments && allComments.comments.map((record, index) => {
+                sortedComments.map((record, index) => {
                     
                     return(
                         

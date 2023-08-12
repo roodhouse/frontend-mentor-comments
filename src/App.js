@@ -23,6 +23,7 @@ function App() {
     } else {
       let allComments = JSON.parse(localStorage.getItem("allComments"));
       let loggedIn = allComments.currentUser.username;
+      
       setStorage(allComments);
       setLoggedIn(loggedIn);
     }
