@@ -19,9 +19,10 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
         updatedComments[index].score++
         let newScore = updatedComments[index].score
         console.log(newScore)
-        const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
+        let updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
         updatedAllComments.comments= updatedComments
-        // add sort logic here?
+        // sort logic
+        updatedAllComments.comments = [...updatedAllComments.comments].sort((a, b) => b.score - a.score);
         localStorage.setItem('allComments', JSON.stringify(updatedAllComments));
         e.target.parentElement.parentElement.nextSibling.firstChild.innerHTML = newScore
        
@@ -41,6 +42,9 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
             console.log(newScore)
             const updatedAllComments = { ...JSON.parse(localStorage.getItem('allComments'))}
             updatedAllComments.comments= updatedComments
+            // sort logic
+            updatedAllComments.comments = [...updatedAllComments.comments].sort((a, b) => b.score - a.score);
+            console.log(updatedAllComments)
             localStorage.setItem('allComments', JSON.stringify(updatedAllComments));
             e.target.parentElement.parentElement.previousSibling.firstChild.innerHTML = newScore
         }

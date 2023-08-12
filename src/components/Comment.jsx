@@ -7,17 +7,17 @@ import Add from './Add'
 
 function Comment({allComments, loggedIn, handleReply, onSubmit, handleEdit, handleDelete}) {
 
-    if (!allComments || !allComments.comments) {
-        return null; // or some loading indicator or placeholder
-      }
+//     if (!allComments || !allComments.comments) {
+//     return null; // or some loading indicator or placeholder
+//   }
 
-    const sortedComments = [...allComments.comments].sort((a, b) => b.score - a.score);
+//     const sortedComments = [...allComments.comments].sort((a, b) => b.score - a.score);
 
   return (
     <>
         <div id="commentContainer">
             {
-                sortedComments.map((record, index) => {
+                allComments && allComments.comments.map((record, index) => {
                     
                     return(
                         
