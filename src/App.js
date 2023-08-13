@@ -6,9 +6,6 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
-// active states etc
-  // delete, edit hover
-  // update hover
 function App() {
   const [storage, setStorage] = useState(null);
   const [loggedIn, setLoggedIn] = useState("joe");
@@ -343,7 +340,8 @@ function App() {
           "w-[102px]",
           "flex",
           "justify-center",
-          "self-end"
+          "self-end",
+          "hover:bg-lightGrayBlue"
         );
 
         let updateButton = document.createElement("button");
@@ -471,7 +469,8 @@ function App() {
            "w-[102px]",
            "flex",
            "justify-center",
-           "self-end"
+           "self-end",
+           "hover:bg-lightGrayBlue"
          );
  
          let updateButton = document.createElement("button");
@@ -599,7 +598,8 @@ function App() {
            "w-[102px]",
            "flex",
            "justify-center",
-           "self-end"
+           "self-end",
+           "hover:bg-lightGrayBlue"
          );
  
          let updateButton = document.createElement("button");

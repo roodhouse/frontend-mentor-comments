@@ -74,18 +74,14 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
                 record.user.username === 'juliusomo' ? (
                     <div id="editDeleteContainer" className='flex'>
                         <div id="deleteMineContainer" onClick={handleDelete} className='flex mr-4 items-center cursor-pointer'>
-                            <div id="deleteMineIcon" className='mr-2'>
-                                <img src={DeleteImage} alt="Delete" />
-                            </div>
-                            <div id="deleteMineCopy" className='text-softRed text-base font-medium leading-6'>
+                            <div id="deleteMineIcon" className='mr-2 w-3 h-[14px] bg-[url("./images/icon-delete.svg")]'/>
+                            <div id="deleteMineCopy" className='text-softRed text-base font-medium leading-6 hover:text-paleRed'>
                                 <p>Delete</p>
                             </div>
                         </div>
                         <div id="editContainer" onClick={handleEdit} className='editComment flex items-center cursor-pointer'>
-                            <div id="editIcon" className='mr-2'>
-                                <img src={EditImage} alt="Edit" />
-                            </div>
-                            <div id="editCopy" className='text-moderateBlue text-base font-medium leading-6'>
+                            <div id="editIcon" className='mr-2 w-[14px] h-[14px] bg-[url("./images/icon-edit.svg")]' />
+                            <div id="editCopy" className='text-moderateBlue text-base font-medium leading-6 hover:text-lightGrayBlue'>
                                 <p>Edit</p>
                             </div>
                         </div>
