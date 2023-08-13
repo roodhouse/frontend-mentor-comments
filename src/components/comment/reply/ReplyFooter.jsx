@@ -104,29 +104,23 @@ function ReplyFooter({record, loggedIn, index, replyIndex, handleReply, handleEd
             {
                 loggedIn === record.user.username ? (
                     <div id="editDeleteContainer" className='flex'>
-                        <div id="deleteMineContainer" onClick={handleDelete} className='flex mr-4 items-center'>
-                            <div id="deleteMineIcon" className='mr-2'>
-                                <img src={Delete} alt="Delete" />
-                            </div>
-                            <div id="deleteMineCopy" className='text-softRed text-base font-medium leading-6'>
+                        <div id="deleteMineContainer" onClick={handleDelete} className='flex mr-4 items-center cursor-pointer'>
+                        <div id="deleteMineIcon" className='mr-2 w-3 h-[14px] bg-[url("./images/icon-delete.svg")]'/>
+                            <div id="deleteMineCopy" className='text-softRed text-base font-medium leading-6 hover:text-paleRed'>
                                 <p>Delete</p>
                             </div>
                         </div>
-                        <div id="editContainer" onClick={handleEdit} className='editComment flex items-center'>
-                            <div id="editIcon" className='mr-2'>
-                                <img src={Edit} alt="Edit" />
-                            </div>
-                            <div id="editCopy" className='text-moderateBlue text-base font-medium leading-6'>
+                        <div id="editContainer" onClick={handleEdit} className='editComment flex items-center cursor-pointer'>
+                        <div id="editIcon" className='mr-2 w-[14px] h-[14px] bg-[url("./images/icon-edit.svg")]' />
+                            <div id="editCopy" className='text-moderateBlue text-base font-medium leading-6 hover:text-lightGrayBlue'>
                                 <p>Edit</p>
                             </div>
                         </div>
                     </div>
                 ) : (
-                    <div id="replyButtonContainer"  onClick={handleReply} className='flex items-center'>
-                        <div id="replyButtonIcon" className='mr-2'>
-                            <img src={Reply} alt="Reply" />
-                        </div>
-                        <div id="replyButtonCopy" className='text-moderateBlue text-base font-medium leading-6'>
+                    <div id="replyButtonContainer"  onClick={handleReply} className='flex items-center cursor-pointer'>
+                        <div id="replyButtonIcon" className='mr-2 w-[14px] h-[13px] bg-[url("./images/icon-reply.svg")] hover:bg-[url("./images/icon-reply-hover.svg")]' />
+                        <div id="replyButtonCopy" className='text-moderateBlue text-base font-medium leading-6 hover:text-lightGrayBlue'>
                             <p>Reply</p>
                         </div>
                     </div>

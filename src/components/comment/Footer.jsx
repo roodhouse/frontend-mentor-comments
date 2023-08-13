@@ -56,7 +56,7 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
     <>
         <div id="commentFooterContainer" className='flex justify-between items-center md:absolute md:w-[682px] md:items-start md:bottom-0'>
             <div id="counterContainer" className='flex items-center py-[10px] pr-[10px] pl-[15px] bg-veryLightGray rounded-[10px] md:flex-col md:py-0 md:px-0 md:w-10'>
-                <div id="plus" className='mr-[9px] md:mr-0 md:mb-[19px] md:pt-3'>
+                <div id="plus" className='mr-[9px] md:mr-0 md:mb-[19px] md:pt-3 cursor-pointer'>
                     <button onClick={handlePlus}>
                         <img src={Plus} alt="Plus" />
                     </button>
@@ -65,7 +65,7 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
                     <p id={record.id+'current'}>{record.score}</p>
                 </div>
                 <div id="minus" className='md:mb-4'>
-                    <button onClick={handleMinus} className='flex items-center'>
+                    <button onClick={handleMinus} className='flex items-center cursor-pointer'>
                         <img src={Minus} alt="Minus" />
                     </button>
                 </div>
@@ -73,29 +73,23 @@ function Footer({record, loggedin, index, handleReply, handleEdit, handleDelete}
             {
                 record.user.username === 'juliusomo' ? (
                     <div id="editDeleteContainer" className='flex'>
-                        <div id="deleteMineContainer" onClick={handleDelete} className='flex mr-4 items-center'>
-                            <div id="deleteMineIcon" className='mr-2'>
-                                <img src={DeleteImage} alt="Delete" />
-                            </div>
-                            <div id="deleteMineCopy" className='text-softRed text-base font-medium leading-6'>
+                        <div id="deleteMineContainer" onClick={handleDelete} className='flex mr-4 items-center cursor-pointer'>
+                            <div id="deleteMineIcon" className='mr-2 w-3 h-[14px] bg-[url("./images/icon-delete.svg")]'/>
+                            <div id="deleteMineCopy" className='text-softRed text-base font-medium leading-6 hover:text-paleRed'>
                                 <p>Delete</p>
                             </div>
                         </div>
-                        <div id="editContainer" onClick={handleEdit} className='editComment flex items-center'>
-                            <div id="editIcon" className='mr-2'>
-                                <img src={EditImage} alt="Edit" />
-                            </div>
-                            <div id="editCopy" className='text-moderateBlue text-base font-medium leading-6'>
+                        <div id="editContainer" onClick={handleEdit} className='editComment flex items-center cursor-pointer'>
+                            <div id="editIcon" className='mr-2 w-[14px] h-[14px] bg-[url("./images/icon-edit.svg")]' />
+                            <div id="editCopy" className='text-moderateBlue text-base font-medium leading-6 hover:text-lightGrayBlue'>
                                 <p>Edit</p>
                             </div>
                         </div>
                     </div>
                 ) : (
-                    <div id="replyContainer" onClick={handleReply} className='flex items-center'>
-                        <div id="replyIcon" className='mr-2'>
-                            <img src={Reply} alt="Reply" />
-                        </div>
-                        <div id="replyCopy" className='text-moderateBlue text-base font-medium leading-6'>
+                    <div id="replyContainer" onClick={handleReply} className='flex items-center cursor-pointer'>
+                        <div id="replyIcon" className='mr-2 w-[14px] h-[13px] bg-[url("./images/icon-reply.svg")] hover:bg-[url("./images/icon-reply-hover.svg")]' />
+                        <div id="replyCopy" className='text-moderateBlue text-base font-medium leading-6 hover:text-lightGrayBlue'>
                             <p>Reply</p>
                         </div>
                     </div>
