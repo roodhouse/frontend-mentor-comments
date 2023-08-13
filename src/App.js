@@ -6,6 +6,8 @@ import Data from './data.json'
 import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
+// active states etc
+
 function App() {
   const [storage, setStorage] = useState(null);
   const [loggedIn, setLoggedIn] = useState("joe");
