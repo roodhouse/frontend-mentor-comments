@@ -7,7 +7,8 @@ import Reply from './components/comment/Reply';
 import Delete from './components/Delete';
 
 // active states etc
-
+  // delete, edit hover
+  // update hover
 function App() {
   const [storage, setStorage] = useState(null);
   const [loggedIn, setLoggedIn] = useState("joe");
